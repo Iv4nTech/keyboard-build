@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block tittle_bar %}Tittle default{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li>Home</li>
+            <li>Users</li>
+        </ul>
+    </header>
+    <main>
+    <h1>{% block tittle_section %}Tittle section default{% endblock %}</h1>
+    {% block content %}Content default{% endblock %}
+    </main>
+    <footer>
+        <small>&copy; 2026 Iván Gómez</small>
+    </footer>
+</body>
+</html>

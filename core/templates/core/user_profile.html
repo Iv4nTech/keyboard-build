@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}User profile @{{user.username}}{% endblock %}
+{% block tittle_section %}@{{user.username}}{% endblock %}
+{% block content %}
+<h2>Description</h2>
+<ul>
+    <li>{{user.first_name}}</li>
+    <li>{{user.last_name}}</li>
+    <li>{{user.email}}</li>
+    <li>{{user.dateofbrith}}</li>
+</ul>
+{% endblock %}
