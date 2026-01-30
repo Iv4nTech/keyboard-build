@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Login{% endblock %}
+    {% block tittle_section %}Login{% endblock %}
+    {% block content %}
+    {% if form.errors %}
+        <p>Please correct the following:</p>
+        {{ form.errors }}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    {% endblock %}

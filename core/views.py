@@ -7,4 +7,4 @@ def home(request):
 
 def user_profile(request, username):
     user = User.objects.get(username=username)
-    return render(request,'core/user_profile.html', {'user':user})
+    return render(request,'core/user_profile.html', {'user_profile':user})
