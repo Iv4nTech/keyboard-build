@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import User
-from .forms import RegisterUserForm
+from .models import User, SocialNetworkUser, SocialNetwork
+from .forms import RegisterUserForm, ConfigurateUserForm
 from django.db.models import Max
 def home(request):
     return render(request, 'core/home.html')
@@ -17,7 +17,8 @@ def list_users(request):
     if username:
         users = users.filter(username__icontains = username)
     if level:
-        users = users.filter(level__gt=level)
+        users = User.objects.annotate(max_level=Max('levels__level__number')).order_by('-max_level')
+        users = users.filter(max_level__gt=level)
     return render(request, 'core/list_users.html', {'users':users})
 
 def ranking_users(request):
@@ -33,4 +34,38 @@ def registration(request):
             return redirect('list_users')
     form = RegisterUserForm()
     return render(request, 'registration/registration.html', {'form':form})
-            
+
+def configuration_user(request):
+    user = request.user
+
+    if request.method == 'POST':
+        form = ConfigurateUserForm(request.POST, request.FILES, user=user)
+        if form.is_valid():
+            bio = form.cleaned_data['bio']
+            image = form.cleaned_data['image']
+            social_network = form.cleaned_data['social_networks']
+            username_network = form.cleaned_data['username_network']
+            url = form.cleaned_data['url']
+
+            SocialNetworkUser.objects.update_or_create(
+                user=request.user,
+                social_network = social_network,
+                defaults={'username':username_network, 'url':url},
+            )
+
+            user.bio = bio
+            user.image = image
+            user.save()
+
+            #Aqui poner que lleva a la misma pagina pero que le salte una messages
+            return redirect('list_users')
+        else:
+            print(form.errors.as_data())
+    data_initial = {'bio':user.bio,
+                    'image':user.image}
+
+
+    networks_socials = SocialNetworkUser.objects.filter(user=user).select_related('social_network')
+
+    form = ConfigurateUserForm(initial=data_initial, user=user)
+    return render(request, 'core/configuration_user.html', {'form':form, 'network_social':networks_socials})
