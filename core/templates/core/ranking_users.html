@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Ranking users{% endblock %}
+{% block tittle_section %}Ranking users{% endblock %}
+{% block content %}
+
+{% for user in users %}
+<li><a href="{% url 'user_profile' user.username %}">{{user.username}}</a>Level: {{user.max_level}}</li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -38,7 +38,7 @@ class Level(models.Model):
         return f'Lvl: {self.number}:{self.name}'
 
 class GetLevel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='levels')
     level = models.ForeignKey(Level, on_delete=models.CASCADE, default=0)
     datetime_get = models.DateTimeField()
 
