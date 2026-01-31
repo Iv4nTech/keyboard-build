@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .models import User
 
 def home(request):
-    return HttpResponse('Home')
+    return render(request, 'core/home.html')
 
 def user_profile(request, username):
     user = User.objects.get(username=username)
