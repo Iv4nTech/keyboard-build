@@ -3,6 +3,19 @@
 {% block tittle_bar %}User list{% endblock %}
 {% block tittle_section %}User list{% endblock %}
 {% block content %}
+<form action="" method="get">
+    <div>
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username">
+    <button type="submit">Buscar</button>
+</div>
+ <div>
+    <label for="username">Level:</label>
+    <input type="number" name="level" id="level">
+</div>
+<button type="submit">Buscar</button>
+<a href="{% url 'list_users' %}">Borrar filtros</a>
+</form>
 <ul>
 {% for user in users %}
 <li><a href="{% url 'user_profile' user.username %}">{{user.username}}</a></li>

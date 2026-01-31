@@ -2,16 +2,21 @@ from django.contrib import admin
 from .models import Case, Component, GetLevel, Keyboard, KeyboardComponent, Keycaps, Level, Pcb, Plate, SocialNetwork, SocialNetworkUser, Switch, User
 from django.contrib.auth.admin import UserAdmin
 
+class UserLevelIntermediate(admin.StackedInline):
+    model = GetLevel
+    extra = 1
+
 class CustomUserAdmin(UserAdmin):
     model = User
     fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('image','bio')}),  # Agrega solo los nuevos campos
+        (None, {'fields': ('image','bio')}),
     )
 
-    # Agregar los nuevos campos a add_fieldsets (para crear usuario)
     add_fieldsets = UserAdmin.add_fieldsets + (
         (None, {'fields': ('image','bio')}),
     )
+
+    inlines = [UserLevelIntermediate]
 
 
 admin.site.register(Case)

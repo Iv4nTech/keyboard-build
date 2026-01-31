@@ -12,6 +12,12 @@ def user_profile(request, username):
 
 def list_users(request):
     users = User.objects.all()
+    username = request.GET.get('username')
+    level = request.GET.get('level')
+    if username:
+        users = users.filter(username__icontains = username)
+    if level:
+        users = users.filter(level__gt=level)
     return render(request, 'core/list_users.html', {'users':users})
 
 def registration(request):
