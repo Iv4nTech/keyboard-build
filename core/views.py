@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from .models import User, SocialNetworkUser, SocialNetwork
 from .forms import RegisterUserForm, ConfigurateUserForm
 from django.db.models import Max
+from django.views.generic import DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth import logout
 def home(request):
     return render(request, 'core/home.html')
 
@@ -46,15 +49,22 @@ def configuration_user(request):
             social_network = form.cleaned_data['social_networks']
             username_network = form.cleaned_data['username_network']
             url = form.cleaned_data['url']
+            dateofbirth = form.cleaned_data['dateofbirth']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
 
-            SocialNetworkUser.objects.update_or_create(
-                user=request.user,
-                social_network = social_network,
-                defaults={'username':username_network, 'url':url},
-            )
+            if social_network:
+                SocialNetworkUser.objects.update_or_create(
+                    user=user,
+                    social_network = social_network,
+                    defaults={'username':username_network, 'url':url},
+                )
 
             user.bio = bio
             user.image = image
+            user.first_name = first_name
+            user.last_name = last_name
+            user.dateofbirth = dateofbirth
             user.save()
 
             #Aqui poner que lleva a la misma pagina pero que le salte una messages
@@ -62,10 +72,27 @@ def configuration_user(request):
         else:
             print(form.errors.as_data())
     data_initial = {'bio':user.bio,
-                    'image':user.image}
+                    'image':user.image,
+                    'first_name':user.first_name,
+                    'last_name':user.last_name,
+                    'dateofbirth':user.dateofbirth}
 
 
     networks_socials = SocialNetworkUser.objects.filter(user=user).select_related('social_network')
 
     form = ConfigurateUserForm(initial=data_initial, user=user)
     return render(request, 'core/configuration_user.html', {'form':form, 'network_social':networks_socials})
+
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('lists_user')
+    template_name = 'core/delete_user.html'
+    context_object_name = 'user'
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def form_valid(self, form):
+        user = self.get_object()
+        logout(self.request)
+        user.delete()
+        return redirect('home')

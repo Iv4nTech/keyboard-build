@@ -9,11 +9,11 @@ class UserLevelIntermediate(admin.StackedInline):
 class CustomUserAdmin(UserAdmin):
     model = User
     fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('image','bio')}),
+        (None, {'fields': ('image','bio', 'dateofbirth', 'country')}),
     )
 
     add_fieldsets = UserAdmin.add_fieldsets + (
-        (None, {'fields': ('image','bio')}),
+        (None, {'fields': ('image','bio', 'dateofbirth', 'country')}),
     )
 
     inlines = [UserLevelIntermediate]

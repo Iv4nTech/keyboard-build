@@ -1,10 +1,15 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
 {% block tittle_bar %}Ranking users{% endblock %}
 {% block tittle_section %}Ranking users{% endblock %}
 {% block content %}
 
 {% for user in users %}
+{% if user.image %}
+<img width="100px" src="{{user.image.url}}" alt="">
+{% else %}
+<img id="image-profile" src="{% static 'images/logo-default.jpg' %}" width="100px" alt="Logo default">
+{% endif %}
 <li><a href="{% url 'user_profile' user.username %}">@{{user.username}}</a>Level: {{user.max_level}}</li>
 {% endfor %}
 </ul>

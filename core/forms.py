@@ -9,13 +9,16 @@ class RegisterUserForm(UserCreationForm):
         fields = ['username','email']
 
 class ConfigurateUserForm(forms.Form):
-    image = forms.ImageField()
-    bio = forms.CharField()
+    image = forms.ImageField(required=False)
+    bio = forms.CharField(required=False)
+    first_name = forms.CharField(required=False)
+    last_name = forms.CharField(required=False)
+    dateofbirth = forms.DateField(widget=forms.DateInput(attrs={'type':'date'}), required=False)
     social_networks = forms.ModelChoiceField(
-        queryset=SocialNetwork.objects.none(), empty_label='Selecciona una red social...'
+        queryset=SocialNetwork.objects.none(), empty_label='Selecciona una red social...', required=False
     )
-    username_network = forms.CharField(max_length=15)
-    url = forms.URLField()
+    username_network = forms.CharField(max_length=15, required=False)
+    url = forms.URLField(required=False)
 
     def __init__(self, *args, **kwargs): # Con esto conseguimos que al instanciar el objeto pues la queryset del choices cambia con las redes sociales que tiene el usuario
         user = kwargs.pop('user')

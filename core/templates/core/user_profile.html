@@ -1,13 +1,21 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block tittle_bar %}User profile @{{user_profile.username}}{% endblock %}
 {% block tittle_section %}@{{user_profile.username}}{% endblock %}
 {% block content %}
-<h2>Description</h2>
-<ul>
-    <li>{{user_profile.first_name}}</li>
-    <li>{{user_proifle.last_name}}</li>
-    <li>{{user_profile.email}}</li>
-    <li>{{user_profile.dateofbrith}}</li>
+{% if user.image %}
+<img width="100px" src="{{user.image.url}}" alt="">
+{% else %}
+<img id="image-profile" src="{% static 'images/logo-default.jpg' %}" width="100px" alt="Logo default">
+{% endif %}
+<p class="bio">{{user_profile.bio}}</p>
+<h2 id="more-abaut">More abaut me</h2>
+<ul hidden id="detail-abaut">
+    <li>{{user_profile.first_name | default:'First name no available'}}</li>
+    <li>{{user_profile.last_name | default:'Last name no available'}}</li>
+    <li>{{user_profile.dateofbirth  | default:'Date of birth no available'}}</li>
+    <li>{{user_profile.country | default:'Country no available'}}</li> 
 </ul>
+<script src="{% static 'js/more_abaut.js' %}"></script>
 {% endblock %}

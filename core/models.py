@@ -3,9 +3,11 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     image = models.ImageField(upload_to='image_users/', null=True, blank=True)
-    bio = models.TextField()
+    bio = models.TextField(null=True, blank=True)
     social_network = models.ManyToManyField('SocialNetwork', through='SocialNetworkUser', related_name='networks')
     level = models.ManyToManyField('Level', through='GetLevel', related_name='levels')
+    dateofbirth = models.DateField(null=True, blank=True)
+    country = models.CharField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.username}'

@@ -11,13 +11,17 @@
         <ul>
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'list_users' %}">Users</a></li>
+            {% if not user.is_authenticated %}
             <li><a href="{% url 'registration' %}">Register</a></li>
+            {% endif %}
             <li><a href="{% url 'ranking_users' %}">Ranking</a></li>
         </ul>
         <div class="login">
             {% if user.is_authenticated %}
             {% if user.image %}
             <img id="image-profile" src="{{user.image.url}}" width="100px" alt="Logo user {{user.username}}">
+            {% else %}
+            <img id="image-profile" src="{% static 'images/logo-default.jpg' %}" width="100px" alt="Logo default">
             {% endif %}
             <nav hidden id="nav-user">
                 <ul>
@@ -26,10 +30,11 @@
                 </ul>
             </nav>
             <form action="{% url 'logout' %}" method="post">
-             {% csrf_token %} 
+                {% csrf_token %} 
               <button type="submit" class="">Log out</button>
+              </form>
             {% else %}
-                  <button type="submit" class="">Login</button>
+            <a href="{% url 'login' %}">Login</a>
             {% endif %}
              </form>
         </div>
