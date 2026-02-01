@@ -20,8 +20,8 @@ class SocialNetwork(models.Model):
         return f'{self.name}'
 
 class SocialNetworkUser(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    social_network = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='social_networks')
+    social_network = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE, related_name='social_networks_user')
     username = models.CharField(max_length=15)
     url = models.URLField()
 
@@ -39,7 +39,7 @@ class Level(models.Model):
 
 class GetLevel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='levels')
-    level = models.ForeignKey(Level, on_delete=models.CASCADE, default=0)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE, default=0, related_name='detail')
     datetime_get = models.DateTimeField()
 
     def __str__(self):

@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block tittle_bar %}Configuration{% endblock %}
+{% block tittle_section %}Configuration{% endblock %}
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_div}}
+    <button type="submit">Guardar</button>
+</form>
+<div hidden>
+    {% for network in network_social %}
+    <h1 id="name-{{network.social_network.name}}">{{network.social_network.name}}</h1>
+    <p id="username-{{network.social_network.name}}">{{network.username}}</p>
+    <p id="url-{{network.social_network.name}}">{{network.url}}</p>
+    {% endfor %}
+</div>
+<script src="{% static 'js/networks_socials.js' %}"></script>
+{% endblock %}
