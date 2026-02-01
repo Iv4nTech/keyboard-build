@@ -122,3 +122,6 @@ AUTH_USER_MODEL = 'core.User'
 
 LOGIN_REDIRECT_URL = '/'  #Esto modificar para que le lleve a la pestaña que estaba
 LOGOUT_REDIRECT_URL = '/accounts/login/'  
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media/'

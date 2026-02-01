@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +16,15 @@
         </ul>
         <div class="login">
             {% if user.is_authenticated %}
-            <p>Usuario: {{user}}</p>
+            {% if user.image %}
+            <img id="image-profile" src="{{user.image.url}}" width="100px" alt="Logo user {{user.username}}">
+            {% endif %}
+            <nav hidden id="nav-user">
+                <ul>
+                    <li><a href="{% url 'user_profile' user.username %}">My profile</a></li>
+                    <li><a href="{% url 'configuration_user' %}">Configuration</a></li>
+                </ul>
+            </nav>
             <form action="{% url 'logout' %}" method="post">
              {% csrf_token %} 
               <button type="submit" class="">Log out</button>
@@ -32,5 +41,6 @@
     <footer>
         <small>&copy; 2026 Iván Gómez</small>
     </footer>
+<script src="{% static 'js/menu_image_profile.js' %}"></script>
 </body>
 </html>
