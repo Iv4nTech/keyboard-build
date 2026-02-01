@@ -2,20 +2,43 @@
 {% load static %}
 
 {% block tittle_bar %}Configuration{% endblock %}
-{% block tittle_section %}Configuration{% endblock %}
+{% block tittle_section %}Configuration account{% endblock %}
+
 {% block content %}
-<form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_div}}
-    <a href="{% url 'delete_user' user.username %}">Delete my user</a>
-    <button type="submit">Guardar</button>
-</form>
-<div hidden>
+
+<div style="max-width: 600px; margin: 0 auto; background-color: var(--bg-card); padding: 2.5rem; border-radius: 1.5rem; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+    
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem;">
+            {{form.as_div}} 
+            </div>
+
+        <button type="submit" class="btn" style="width: 100%; font-size: 1.1rem; padding: 1rem;">
+            Save changes
+        </button>
+    </form>
+
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center;">
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+           Do you want to delete your account permanently?
+        </p>
+        
+        <a href="{% url 'delete_user' user.username %}" class="btn btn-danger" style="display: inline-block; font-size: 0.9rem;">
+            Delete my user
+        </a>
+    </div>
+
+</div>
+
+<div class="hidden">
     {% for network in network_social %}
     <h1 id="name-{{network.social_network.name}}">{{network.social_network.name}}</h1>
     <p id="username-{{network.social_network.name}}">{{network.username}}</p>
     <p id="url-{{network.social_network.name}}">{{network.url}}</p>
     {% endfor %}
 </div>
+
 <script src="{% static 'js/networks_socials.js' %}"></script>
 {% endblock %}

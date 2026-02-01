@@ -1,16 +1,32 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block tittle_bar %}Ranking users{% endblock %}
-{% block tittle_section %}Ranking users{% endblock %}
+{% block tittle_section %}Top Players{% endblock %}
 {% block content %}
 
-{% for user in users %}
-{% if user.image %}
-<img width="100px" src="{{user.image.url}}" alt="">
-{% else %}
-<img id="image-profile" src="{% static 'images/logo-default.jpg' %}" width="100px" alt="Logo default">
-{% endif %}
-<li><a href="{% url 'user_profile' user.username %}">@{{user.username}}</a>Level: {{user.max_level}}</li>
-{% endfor %}
-</ul>
+<div class="ranking-list">
+    <div style="padding: 1rem 1.5rem; background: rgba(255,255,255,0.02); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">
+        Tabla de Clasificación
+    </div>
+    
+    <ul>
+    {% for user in users %}
+        <li class="ranking-item">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                {% if user.image %}
+                <img src="{{user.image.url}}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="">
+                {% else %}
+                <img src="{% static 'images/logo-default.jpg' %}" style="width: 40px; height: 40px; border-radius: 50%; opacity: 0.7;" alt="Default">
+                {% endif %}
+                
+                <a href="{% url 'user_profile' user.username %}" style="font-weight: 600;">@{{user.username}}</a>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Level</div>
+                <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">{{user.max_level}}</div>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
 {% endblock %}

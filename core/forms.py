@@ -15,7 +15,7 @@ class ConfigurateUserForm(forms.Form):
     last_name = forms.CharField(required=False)
     dateofbirth = forms.DateField(widget=forms.DateInput(attrs={'type':'date'}), required=False)
     social_networks = forms.ModelChoiceField(
-        queryset=SocialNetwork.objects.none(), empty_label='Selecciona una red social...', required=False
+        queryset=SocialNetwork.objects.none(), empty_label='Select social network...', required=False
     )
     username_network = forms.CharField(max_length=15, required=False)
     url = forms.URLField(required=False)

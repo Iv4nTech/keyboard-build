@@ -2,20 +2,59 @@
 {% load static %}
 
 {% block tittle_bar %}User profile @{{user_profile.username}}{% endblock %}
-{% block tittle_section %}@{{user_profile.username}}{% endblock %}
+{% block tittle_section %}Perfil de Usuario{% endblock %}
+
 {% block content %}
-{% if user.image %}
-<img width="100px" src="{{user.image.url}}" alt="">
-{% else %}
-<img id="image-profile" src="{% static 'images/logo-default.jpg' %}" width="100px" alt="Logo default">
-{% endif %}
-<p class="bio">{{user_profile.bio}}</p>
-<h2 id="more-abaut">More abaut me</h2>
-<ul hidden id="detail-abaut">
-    <li>{{user_profile.first_name | default:'First name no available'}}</li>
-    <li>{{user_profile.last_name | default:'Last name no available'}}</li>
-    <li>{{user_profile.dateofbirth  | default:'Date of birth no available'}}</li>
-    <li>{{user_profile.country | default:'Country no available'}}</li> 
-</ul>
+
+<div class="profile-card">
+    
+    <div style="position: absolute; top: -60px; right: -60px; width: 250px; height: 250px; background: var(--primary); opacity: 0.15; filter: blur(60px); border-radius: 50%; pointer-events: none;"></div>
+
+    <div style="position: relative; z-index: 10;">
+        <div style="position: relative; display: inline-block; margin-bottom: 1.5rem;">
+            {% if user.image %}
+            <img class="profile-img-large" src="{{user.image.url}}" alt="Foto de perfil">
+            {% else %}
+            <img class="profile-img-large" src="{% static 'images/logo-default.jpg' %}" alt="Logo default">
+            {% endif %}
+            
+            <div style="position: absolute; bottom: 15px; right: 10px; width: 16px; height: 16px; background-color: #22c55e; border-radius: 50%; border: 3px solid var(--bg-dark);"></div>
+        </div>
+
+        <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff;">
+            @{{user_profile.username}}
+        </h2>
+        
+        <p style="color: var(--text-muted); line-height: 1.6; max-width: 450px; margin: 0 auto 2rem auto;">
+            {{user_profile.bio | default:""}}
+        </p>
+
+        <div style="border-bottom: 1px solid var(--primary-glow); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: inline-block;">
+            <h3 id="more-abaut" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); cursor: pointer; font-weight: 600; margin: 0;">
+                More about me +
+            </h3>
+        </div>
+
+        <ul hidden id="detail-abaut" style="text-align: left; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); list-style: none;">
+            <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <span style="color: var(--text-muted);">First Name</span>
+                <span style="color: var(--text-main);">{{user_profile.first_name | default:'Not available'}}</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <span style="color: var(--text-muted);">Last Name</span>
+                <span style="color: var(--text-main);">{{user_profile.last_name | default:'Not available'}}</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <span style="color: var(--text-muted);">Birth Date</span>
+                <span style="color: var(--text-main);">{{user_profile.dateofbirth  | default:'Not available'}}</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 8px 0;">
+                <span style="color: var(--text-muted);">Country</span>
+                <span style="color: var(--text-main);">{{user_profile.country | default:'Not available'}}</span>
+            </li> 
+        </ul>
+    </div>
+</div>
+
 <script src="{% static 'js/more_abaut.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,416 @@
+/* --- VARIABLES (Paleta Naranja / Blanco / Negro) --- */
+:root {
+    /* Fondos: Escala de Negros cálidos */
+    --bg-dark: #09090b;       /* Negro casi puro (Zinc 950) */
+    --bg-card: #18181b;       /* Gris muy oscuro (Zinc 900) - Adiós al azul */
+    --bg-input: #27272a;      /* Gris oscuro para inputs */
+    --border-color: rgba(255, 255, 255, 0.1);
+    
+    /* Acentos: Naranja Fuego */
+    --primary: #f97316;       /* Naranja vibrante (Orange 500) */
+    --primary-hover: #ea580c; /* Naranja más oscuro para hover */
+    --primary-glow: rgba(249, 115, 22, 0.5); /* Resplandor naranja */
+    
+    --danger: #ef4444;        /* Rojo se mantiene para errores */
+    --danger-glow: rgba(239, 68, 68, 0.4);
+    
+    --text-main: #ffffff;     /* Blanco puro */
+    --text-muted: #a1a1aa;    /* Gris claro (Zinc 400) */
+    
+    --font-main: 'Outfit', sans-serif;
+}
+
+/* --- RESET & BASICS --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
+
+/* --- EFECTOS DE FONDO (GLOWS NARANJAS) --- */
+.glow-bg {
+    position: fixed;
+    width: 600px; height: 600px;
+    /* CAMBIO: Gradiente Naranja a transparente */
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, rgba(0,0,0,0) 70%);
+    top: -200px; left: -200px;
+    z-index: -1;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(60px);
+}
+
+/* --- HEADER & NAVBAR --- */
+header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(9, 9, 11, 0.85); /* Negro semitransparente */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 1rem;
+}
+
+.header-container {
+    max-width: 1200px; margin: 0 auto; height: 80px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { font-weight: 500; color: var(--text-muted); font-size: 0.95rem; }
+.nav-links a:hover { color: var(--primary); text-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
+
+/* --- USER MENU --- */
+.user-menu { position: relative; display: flex; align-items: center; gap: 1rem; }
+.avatar {
+    width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--border-color); cursor: pointer;
+    transition: 0.3s;
+}
+.avatar:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+.dropdown {
+    display: none;
+    position: absolute; top: 100%; right: 0; margin-top: 10px;
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 12px; width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    overflow: hidden;
+    flex-direction: column;
+}
+/* Clase helper para JS */
+.dropdown.show { display: flex; }
+
+.dropdown a, .dropdown button {
+    display: block; width: 100%; text-align: left;
+    padding: 12px 16px; background: none; border: none;
+    color: var(--text-muted); cursor: pointer; font-size: 0.9rem;
+}
+.dropdown a:hover, .dropdown button:hover { background: rgba(255,255,255,0.05); color: var(--primary); }
+.dropdown button { color: #f87171; }
+
+/* --- LAYOUT --- */
+main {
+    flex: 1; width: 100%; max-width: 1000px;
+    margin: 40px auto; padding: 0 20px;
+    animation: fadeUp 0.6s ease-out;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1.page-title {
+    font-size: 2.5rem; font-weight: 700; text-align: center;
+    margin-bottom: 2rem;
+    /* CAMBIO: Gradiente Blanco a Gris (más elegante para contraste negro) */
+    background: linear-gradient(to right, #ffffff, #a1a1aa);
+    -webkit-background-clip: text; color: transparent;
+}
+
+/* --- FORMULARIOS --- */
+form p, .form-group { margin-bottom: 1.25rem; }
+label { display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; }
+
+input[type="text"], input[type="password"], input[type="email"], input[type="number"], select, textarea {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid #3f3f46;
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    font-family: var(--font-main);
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2); /* Glow naranja */
+}
+
+input:disabled {
+    background-color: #000; border-color: #27272a;
+    color: #52525b; cursor: not-allowed; opacity: 0.6;
+}
+
+/* --- BOTONES (Estilo Naranja) --- */
+button, .btn {
+    display: inline-block;
+    /* CAMBIO: Gradiente Naranja a Rojo suave */
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: white; border: none;
+    padding: 0.8rem 1.5rem; border-radius: 0.75rem;
+    font-weight: 600; cursor: pointer; text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+button:hover, .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px var(--primary-glow);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);
+}
+.btn-danger:hover {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+}
+
+.btn-ghost {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.1); color: white; }
+
+/* --- CARDS & LISTS --- */
+
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+.user-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem; border-radius: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+    transition: 0.3s;
+}
+.user-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary); /* Borde naranja al hover */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.user-initial {
+    width: 45px; height: 45px;
+    /* CAMBIO: Gradiente de la inicial */
+    background: linear-gradient(135deg, var(--primary), #fdba74);
+    color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 1.2rem;
+}
+
+/* Ranking List */
+.ranking-list {
+    background: var(--bg-card);
+    border-radius: 1rem; overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+.ranking-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: 0.2s;
+}
+.ranking-item:hover { background: rgba(249, 115, 22, 0.05); } /* Sutil naranja al hover */
+.ranking-item:last-child { border-bottom: none; }
+
+/* Perfil */
+.profile-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem; padding: 3rem 2rem;
+    text-align: center; max-width: 600px; margin: 0 auto;
+    position: relative; overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+.profile-img-large {
+    width: 140px; height: 140px; border-radius: 50%;
+    border: 5px solid var(--bg-dark);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3); /* Anillo naranja */
+    object-fit: cover;
+}
+
+/* Buscador */
+.search-bar {
+    background: var(--bg-card); padding: 1.5rem;
+    border-radius: 1rem; border: 1px solid var(--border-color);
+    margin-bottom: 2rem; display: flex; gap: 1rem; align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+/* Danger Zone */
+.danger-zone {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 2rem; border-radius: 1rem;
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    text-align: center; padding: 2rem;
+    color: var(--text-muted); border-top: 1px solid var(--border-color);
+    margin-top: auto; font-size: 0.85rem;
+}
+
+.hidden { display: none !important; }
+
+/* --- USER MENU (Corregido Estilo Naranja) --- */
+.user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.avatar:hover {
+    border-color: var(--primary); /* Borde Naranja */
+    box-shadow: 0 0 15px var(--primary-glow); /* Resplandor Naranja */
+    transform: scale(1.05);
+}
+
+/* Estilos del Dropdown */
+.dropdown {
+    /* Posicionamiento */
+    position: absolute;
+    top: 120%; /* Un poco más abajo del avatar */
+    right: 0;
+    width: 220px;
+    z-index: 1000;
+    
+    /* Estética Dark / Orange */
+    background-color: #121214; /* Fondo muy oscuro, ligeramente distinto a la card */
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px -5px rgba(0, 0, 0, 0.9);
+    
+    /* Layout interno */
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
+    
+    /* Animación de entrada (Estado Visible) */
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: auto;
+}
+
+/* Lógica para ocultarlo (Compatible con atributo 'hidden' de HTML) */
+.dropdown[hidden] {
+    display: block !important; /* Sobrescribimos display para mantener la transición si se desea, o: */
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    visibility: hidden; /* Oculta visualmente y del lector de pantalla */
+}
+
+/* Enlaces dentro del menú */
+.dropdown a, 
+.dropdown button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    font-family: var(--font-main);
+}
+
+/* Efecto Hover en los enlaces (Naranja) */
+.dropdown a:hover {
+    background-color: rgba(249, 115, 22, 0.1); /* Fondo naranja muy sutil */
+    color: var(--primary); /* Texto Naranja brillante */
+    padding-left: 24px; /* Pequeño desplazamiento a la derecha */
+}
+
+/* Separador para el Logout */
+.dropdown form {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+/* Botón de Logout (Rojo) */
+.dropdown button {
+    color: #fca5a5; /* Rojo suave por defecto */
+}
+
+.dropdown button:hover {
+    background-color: rgba(239, 68, 68, 0.1); /* Fondo rojo sutil */
+    color: #ef4444; /* Rojo intenso */
+    padding-left: 24px;
+}
+
+form p, .form-group { margin-bottom: 1.25rem; }
+label { display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; }
+
+/* 1. Agregados 'date' y 'url' a la lista principal */
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="number"], 
+input[type="date"],  /* <--- Nuevo */
+input[type="url"],   /* <--- Nuevo */
+select, 
+textarea {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid #3f3f46; /* Zinc 700 */
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    font-family: var(--font-main);
+    transition: all 0.3s ease;
+    
+    /* Esto ayuda a que el calendario nativo del navegador se vea oscuro */
+    color-scheme: dark; 
+}
+
+/* Estado Focus (Naranja) */
+input:focus, select:focus, textarea:focus {
+    outline: none; 
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2); /* Glow naranja */
+}
+
+/* Estado Disabled */
+input:disabled {
+    background-color: #000; 
+    border-color: #27272a;
+    color: #52525b; 
+    cursor: not-allowed; 
+    opacity: 0.6;
+}
+
+/* --- TRUCO PARA EL ICONO DEL CALENDARIO (DATE) --- */
+/* Invierte el color del icono (de negro a blanco) para que se vea en el fondo oscuro */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}

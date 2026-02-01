@@ -1,24 +1,35 @@
 {% extends 'core/base.html' %}
 
 {% block tittle_bar %}User list{% endblock %}
-{% block tittle_section %}User list{% endblock %}
+{% block tittle_section %}Explorar Usuarios{% endblock %}
 {% block content %}
-<form action="" method="get">
-    <div>
-    <label for="username">Username:</label>
-    <input type="text" name="username" id="username">
+
+<form action="" method="get" class="search-bar">
+    <div style="flex: 1;">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Buscar usuario...">
+    </div>
+    <div style="width: 120px;">
+        <label for="level">Level</label>
+        <input type="number" name="level" id="level">
+    </div>
     <button type="submit">Buscar</button>
-</div>
- <div>
-    <label for="username">Level:</label>
-    <input type="number" name="level" id="level">
-</div>
-<button type="submit">Buscar</button>
-<a href="{% url 'list_users' %}">Borrar filtros</a>
+    <a href="{% url 'list_users' %}" class="btn btn-ghost" style="padding: 0.8rem;">✕</a>
 </form>
-<ul>
+
+<ul class="user-grid">
 {% for user in users %}
-<li><a href="{% url 'user_profile' user.username %}">{{user.username}}</a></li>
+    <li class="user-card">
+        <a href="{% url 'user_profile' user.username %}" style="display: flex; align-items: center; gap: 15px; width: 100%;">
+            <div class="user-initial">
+                {{ user.username|slice:":1"|upper }}
+            </div>
+            <div>
+                <h3 style="font-weight: 600; color: #fff;">{{user.username}}</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Ver perfil</span>
+            </div>
+        </a>
+    </li>
 {% endfor %}
 </ul>
 {% endblock %}

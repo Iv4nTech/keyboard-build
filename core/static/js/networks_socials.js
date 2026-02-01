@@ -2,8 +2,12 @@ const select = document.getElementsByName('social_networks')[0];
 const inputUsername = document.getElementsByName('username_network')[0];
 const inputUrl = document.getElementsByName('url')[0];
 
+console.log(inputUrl)
+console.log(inputUsername)
+
 inputUrl.disabled = true;
 inputUsername.disabled = true;
+
 select.addEventListener('change', (event) => {
     const indexSelect = select.selectedIndex;
     if (indexSelect != 0) {

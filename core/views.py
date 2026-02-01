@@ -85,14 +85,12 @@ def configuration_user(request):
 
 class UserDeleteView(DeleteView):
     model = User
-    success_url = reverse_lazy('lists_user')
+    success_url = reverse_lazy('list_users')
     template_name = 'core/delete_user.html'
     context_object_name = 'user'
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
     def form_valid(self, form):
-        user = self.get_object()
         logout(self.request)
-        user.delete()
-        return redirect('home')
+        return super().form_valid(form)

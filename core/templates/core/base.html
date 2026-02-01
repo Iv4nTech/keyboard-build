@@ -4,48 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block tittle_bar %}Tittle default{% endblock %}</title>
+    <title>{% block tittle_bar %}Home{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+    
+    <div class="glow-bg"></div>
+
     <header>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'list_users' %}">Users</a></li>
-            {% if not user.is_authenticated %}
-            <li><a href="{% url 'registration' %}">Register</a></li>
-            {% endif %}
-            <li><a href="{% url 'ranking_users' %}">Ranking</a></li>
-        </ul>
-        <div class="login">
-            {% if user.is_authenticated %}
-            {% if user.image %}
-            <img id="image-profile" src="{{user.image.url}}" width="100px" alt="Logo user {{user.username}}">
-            {% else %}
-            <img id="image-profile" src="{% static 'images/logo-default.jpg' %}" width="100px" alt="Logo default">
-            {% endif %}
-            <nav hidden id="nav-user">
-                <ul>
-                    <li><a href="{% url 'user_profile' user.username %}">My profile</a></li>
-                    <li><a href="{% url 'configuration_user' %}">Configuration</a></li>
-                </ul>
-            </nav>
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %} 
-              <button type="submit" class="">Log out</button>
-              </form>
-            {% else %}
-            <a href="{% url 'login' %}">Login</a>
-            {% endif %}
-             </form>
+        <div class="header-container">
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'list_users' %}">Users</a></li>
+                <li><a href="{% url 'ranking_users' %}">Ranking</a></li>
+            </ul>
+
+            <div class="user-menu">
+                {% if user.is_authenticated %}
+                    {% if user.image %}
+                    <img class="avatar" id="image-profile" src="{{user.image.url}}" alt="User Profile">
+                    {% else %}
+                    <img class="avatar" id="image-profile" src="{% static 'images/logo-default.jpg' %}" alt="Default Profile">
+                    {% endif %}
+                    
+                    <nav class="dropdown" id="nav-user" hidden>
+                        <a href="{% url 'user_profile' user.username %}">My profile</a>
+                        <a href="{% url 'configuration_user' %}">Configuration</a>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 5px;">
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %} 
+                                <button type="submit">Log out</button>
+                            </form>
+                        </div>
+                    </nav>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-ghost">Login</a>
+                    <a href="{% url 'registration' %}" class="btn">Register</a>
+                {% endif %}
+            </div>
         </div>
     </header>
+
     <main>
-    <h1>{% block tittle_section %}Tittle section default{% endblock %}</h1>
-    {% block content %}Content default{% endblock %}
+        <h1 class="page-title">{% block tittle_section %}{% endblock %}</h1>
+        {% block content %}{% endblock %}
     </main>
+
     <footer>
         <small>&copy; 2026 Iván Gómez</small>
     </footer>
+
 <script src="{% static 'js/menu_image_profile.js' %}"></script>
 </body>
 </html>
