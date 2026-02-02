@@ -1,12 +1,12 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block tittle_bar %}Ranking users{% endblock %}
-{% block tittle_section %}Top Players{% endblock %}
+{% block tittle_section %}Top Users{% endblock %}
 {% block content %}
 
 <div class="ranking-list">
     <div style="padding: 1rem 1.5rem; background: rgba(255,255,255,0.02); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">
-        Tabla de Clasificación
+        Table ranking
     </div>
     
     <ul>
@@ -23,7 +23,7 @@
             </div>
             <div style="text-align: right;">
                 <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Level</div>
-                <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">{{user.max_level}}</div>
+                <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">{{user.max_level | default:'0'}}</div>
             </div>
         </li>
     {% endfor %}

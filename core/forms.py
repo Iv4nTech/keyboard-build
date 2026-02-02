@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, SocialNetworkUser, SocialNetwork
+from .models import User, SocialNetworkUser, SocialNetwork, Keyboard
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
@@ -26,3 +26,14 @@ class ConfigurateUserForm(forms.Form):
 
         if user:
             self.fields['social_networks'].queryset = SocialNetwork.objects.filter(social_networks_user__user=user)
+
+class CreateKeyboardForm(forms.ModelForm):
+    class Meta:
+        model = Keyboard
+        fields = ['name', 'colours', 'price', 'stars']
+
+        widgets = {
+            'colours':forms.TextInput(attrs={
+                'type':'color'
+            })
+        }

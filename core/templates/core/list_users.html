@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
 {% block tittle_bar %}User list{% endblock %}
-{% block tittle_section %}Explorar Usuarios{% endblock %}
+{% block tittle_section %}Discover users{% endblock %}
 {% block content %}
 
 <form action="" method="get" class="search-bar">
@@ -22,7 +22,12 @@
     <li class="user-card">
         <a href="{% url 'user_profile' user.username %}" style="display: flex; align-items: center; gap: 15px; width: 100%;">
             <div class="user-initial">
-                {{ user.username|slice:":1"|upper }}
+                {% if user.image %}
+                <img class="avatar" id="image-profile" src="{% url '{{user.image.url}}' %}" alt="Logo {{user.username}}">
+                {{ user.image.url }}
+                {% else %}
+                <img class="avatar" id="image-profile" src="{% static 'images/logo-default.jpg' %}" alt="Logo default">
+                {% endif %}
             </div>
             <div>
                 <h3 style="font-weight: 600; color: #fff;">{{user.username}}</h3>

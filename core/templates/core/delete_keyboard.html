@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Delete keyboard #{{keyboard.id}} {{keyboard.name}}{% endblock %}
+{% block tittle_section %}Delete keyboard #{{keyboard.id}} {{keyboard.name}}{% endblock %}
+
+
+{% block content %}
+<div class="danger-zone" style="max-width: 500px; margin: 2rem auto;">
+    
+    <p style="color: #fca5a5; margin-bottom: 2rem; font-size: 1.1rem;">
+        Deleting keyboard will permanently delete, this operation is irreversible.
+    </p>
+    
+    <form action="" method="post" style="display: flex; gap: 1rem; justify-content: center;">
+        {% csrf_token %}
+        <a href="{% url 'user_profile' user.username %}" class="btn btn-ghost">Cancel</a>
+        <button type="submit" class="btn btn-danger">Delete permanently</button>
+    </form>
+</div>
+{% endblock %}

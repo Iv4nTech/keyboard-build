@@ -1,17 +1,19 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import User, SocialNetworkUser, SocialNetwork
-from .forms import RegisterUserForm, ConfigurateUserForm
+from .models import User, SocialNetworkUser, SocialNetwork, Keyboard
+from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm
 from django.db.models import Max
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, CreateView, ListView, DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
+from django.http import HttpResponseForbidden
 def home(request):
     return render(request, 'core/home.html')
 
 def user_profile(request, username):
     user = User.objects.get(username=username)
-    return render(request,'core/user_profile.html', {'user_profile':user})
+    keyboards = Keyboard.objects.filter(user=user)
+    return render(request,'core/user_profile.html', {'user_profile':user, 'keyboards':keyboards})
 
 def list_users(request):
     users = User.objects.all()
@@ -94,3 +96,47 @@ class UserDeleteView(DeleteView):
     def form_valid(self, form):
         logout(self.request)
         return super().form_valid(form)
+
+class CreateKeyboard(CreateView):
+    model = Keyboard
+    template_name = 'core/create_keyboard.html'
+    form_class = CreateKeyboardForm
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('user_profile', kwargs={'username':self.request.user})
+    
+class ViewKeyboard(ListView):
+    model = Keyboard
+    template_name = 'core/view_keyboards.html'
+    context_object_name = 'keyboards'
+
+    def get_queryset(self):
+        return Keyboard.objects.filter(user=self.request.user)
+    
+class DetailKeyboard(DetailView):
+    model = Keyboard
+    context_object_name = 'keyboard'
+    template_name = 'core/detail_keyboard.html'
+
+class DeleteKeyboard(DeleteView):
+    model = Keyboard
+    context_object_name = 'keyboard'
+    template_name = 'core/delete_keyboard.html'
+
+    def form_valid(self, form):
+
+        keyboard_delete = self.get_object()
+
+        if keyboard_delete.user != self.request.user:
+            return HttpResponseForbidden('You not cant eliminate keyboard by another user')
+
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('user_profile', kwargs={'username':self.request.user})

@@ -414,3 +414,370 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
     opacity: 1;
 }
+
+/* --- PRODUCT CARDS (Teclados) --- */
+
+/* Reutilizamos el grid, pero definimos una tarjeta específica vertical */
+.product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column; /* Apila elementos verticalmente */
+    gap: 1rem;
+    transition: all 0.3s ease;
+    height: 100%; /* Para que todas las cards tengan misma altura en el grid */
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Cabecera: Título y Precio */
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.product-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.price-tag {
+    background: rgba(249, 115, 22, 0.15); /* Fondo naranja transparente */
+    color: var(--primary);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    white-space: nowrap; /* Evita que el precio se rompa en dos líneas */
+}
+
+/* Sección de Rating */
+.rating-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.star-icon {
+    color: #fbbf24; /* Color Dorado/Amber */
+    font-size: 1.1rem;
+}
+
+.rating-value {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.rating-max {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* Separador */
+.product-divider {
+    height: 1px;
+    background: var(--border-color);
+    width: 100%;
+}
+
+/* Footer (Colores) */
+.product-footer {
+    margin-top: auto; /* Empuja el footer al fondo de la tarjeta */
+}
+
+.product-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.pill-tag {
+    display: inline-block;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    padding: 4px 12px;
+    border-radius: 20px; /* Forma de píldora */
+    font-size: 0.85rem;
+    color: var(--text-main);
+}
+
+/* Estado Vacío */
+.empty-state {
+    grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+    text-align: center;
+    padding: 4rem;
+    background: var(--bg-card);
+    border-radius: 1rem;
+    border: 1px dashed var(--border-color);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* --- DETAIL VIEW (Ficha de Producto - CORREGIDO) --- */
+
+.detail-container {
+    max-width: 700px;
+    margin: 40px auto; /* Margen arriba/abajo para separar del header */
+    padding: 0 20px;
+}
+
+.detail-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    display: flex;       /* Nuevo: Asegura estructura flex vertical */
+    flex-direction: column;
+}
+
+/* Cabecera */
+.detail-header-large {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%);
+    padding: 3rem 2rem; /* Mucho espacio interno */
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+    display: flex;         /* Nuevo */
+    flex-direction: column; /* Nuevo */
+    gap: 1.5rem;           /* Separa el título del precio */
+    align-items: center;
+}
+
+.detail-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin: 0; /* Quitamos margin default para usar gap */
+    line-height: 1.1;
+}
+
+.price-tag-large {
+    display: inline-block;
+    background: rgba(249, 115, 22, 0.15);
+    color: var(--primary);
+    border: 1px solid rgba(249, 115, 22, 0.4);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Cuerpo con Espaciado */
+.detail-body {
+    padding: 2rem 3rem; /* Espacio a los lados */
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* El espacio lo dará el padding de las filas */
+}
+
+/* Filas (Aquí está la clave de la separación) */
+.detail-row {
+    display: flex;
+    justify-content: space-between; /* Uno a la izq, otro a la derecha */
+    align-items: center;
+    padding: 1.5rem 0; /* Espacio ARRIBA y ABAJO de cada línea */
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 500;
+    width: 40%; /* Asegura que la etiqueta tenga sitio */
+}
+
+.detail-value {
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: right;
+    width: 60%; /* El valor ocupa el resto */
+    display: flex;
+    justify-content: flex-end; /* Alinea a la derecha */
+}
+
+/* Elementos pequeños */
+.user-badge {
+    background: var(--bg-input);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+/* Botones de abajo */
+.action-buttons {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding-bottom: 3rem;
+}
+
+/* --- USER PROFILE (Limpieza de estilos en línea) --- */
+
+/* Contenedor del avatar y el punto de estado */
+.avatar-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    background-color: #22c55e; /* Verde online */
+    border-radius: 50%;
+    border: 3px solid var(--bg-dark);
+}
+
+/* Efecto de luz detrás de la tarjeta */
+.profile-glow-effect {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 250px;
+    height: 250px;
+    background: var(--primary);
+    opacity: 0.15;
+    filter: blur(60px);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* Contenedor relativo para el contenido del perfil (z-index) */
+.profile-content {
+    position: relative;
+    z-index: 10;
+}
+
+/* Textos del perfil */
+.profile-username {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.profile-bio {
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 450px;
+    margin: 0 auto 2rem auto;
+}
+
+/* Botón "More about me" */
+.expand-trigger-container {
+    border-bottom: 1px solid var(--primary-glow);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+.expand-trigger {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Lista desplegable de detalles */
+.expand-content {
+    text-align: left;
+    background: rgba(0,0,0,0.2);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    list-style: none;
+}
+
+.expand-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.expand-item:last-child {
+    border-bottom: none;
+}
+
+/* --- SECCIÓN TECLADOS (Separación y Grid) --- */
+
+/* Espaciador principal entre perfil y teclados */
+.section-spacer {
+    margin-top: 4rem; /* Esto arregla el solapamiento */
+}
+
+/* Cabecera de la sección (Título + Botón) */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+/* Enlace que cubre toda la tarjeta */
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%; /* Asegura que el enlace cubra la tarjeta */
+}
+
+/* --- CORRECCIÓN PARA ENLACES EN TARJETAS --- */
+
+/* Esta clase hace que el enlace ocupe toda la tarjeta y organice el contenido */
+.card-link {
+    display: flex;          /* Activa el modo flexible */
+    flex-direction: column; /* Apila los elementos verticalmente */
+    gap: 1rem;              /* Recupera el espacio entre Título, Estrellas y Footer */
+    height: 100%;           /* Ocupa toda la altura disponible */
+    text-decoration: none;  /* Quita el subrayado por defecto */
+    color: inherit;         /* Hereda el color de texto blanco */
+    padding: 20px;
+}
+
+/* Opcional: Para asegurar que el hover funcione bien en toda la tarjeta */
+.product-card:has(.card-link) {
+    padding: 0; /* Quitamos padding al LI para dárselo al enlace si fuera necesario */
+}
+
+/* Si quieres que TODO el área sea clicable incluyendo el borde, 
+   lo ideal es mover el padding de .product-card a .card-link.
+   Pero para un arreglo rápido, el bloque de arriba .card-link es suficiente.
+*/

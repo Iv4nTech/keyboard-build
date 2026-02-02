@@ -52,7 +52,7 @@ class Keyboard(models.Model):
     colours = models.CharField(max_length=48) #En teoria va a ver 3 colores entonces 16 x 3 = 48 digitos en hexadecimal
     price = models.DecimalField(max_digits=9, decimal_places=2) #Un teclado puede costar máximo 1M€
     stars = models.DecimalField(max_digits=2, decimal_places=1) # Para las estrellas del 1 al 5
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='keyboards')
     component = models.ManyToManyField('Component', through='KeyboardComponent', related_name='components')
 
     def __str__(self):

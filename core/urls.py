@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import home, user_profile, list_users, home, registration,ranking_users, configuration_user, UserDeleteView
+from .views import home, user_profile, list_users, home, registration,ranking_users, configuration_user, UserDeleteView, CreateKeyboard, ViewKeyboard, DetailKeyboard, DeleteKeyboard
 
 urlpatterns = [
     path('', home, name='hello'),
@@ -11,4 +11,9 @@ urlpatterns = [
     path('user/configuration/', configuration_user, name='configuration_user'),
     path('user/configuration/delete_user/<username>', UserDeleteView.as_view(), name='delete_user'),
     path('profile/<username>/', user_profile, name='user_profile'),
+    path('profile/create/keyboard', CreateKeyboard.as_view(), name='create_keyboard'),
+    path('profile/view/keyboards', ViewKeyboard.as_view(), name='view_keyboard'),
+    path('detail/keyboard/<int:pk>', DetailKeyboard.as_view(), name='detail_keyboard'),
+    path('delete/keyboard/<int:pk>', DeleteKeyboard.as_view(), name='delete_keyboard')
+
 ]
