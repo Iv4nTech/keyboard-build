@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Update keyboard #{{keyboard.id}}{{keyboard.name}}{% endblock %}
+{% block tittle_section %}Update keyboard #{{keyboard.id}}{{keyboard.name}}{% endblock %}
+
+
+{% block content %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_div}}
+    <button type="submit">Update</button>
+</form>
+{% endblock %}

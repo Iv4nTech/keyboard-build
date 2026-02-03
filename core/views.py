@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .models import User, SocialNetworkUser, SocialNetwork, Keyboard
 from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm
 from django.db.models import Max
-from django.views.generic import DeleteView, CreateView, ListView, DetailView
+from django.views.generic import DeleteView, CreateView, ListView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
 from django.http import HttpResponseForbidden
@@ -138,5 +138,14 @@ class DeleteKeyboard(DeleteView):
 
         return super().form_valid(form)
     
+    def get_success_url(self):
+        return reverse_lazy('user_profile', kwargs={'username':self.request.user})
+    
+class UpdateKeyboard(UpdateView):
+    model = Keyboard
+    context_object_name = 'keyboard'
+    template_name = 'core/update_keyboard.html'
+    form_class = CreateKeyboardForm
+
     def get_success_url(self):
         return reverse_lazy('user_profile', kwargs={'username':self.request.user})
