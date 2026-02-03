@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.forms import ValidationError
+from django.db.models import UniqueConstraint
 
 class User(AbstractUser):
     image = models.ImageField(upload_to='image_users/', null=True, blank=True)
@@ -16,7 +18,7 @@ class User(AbstractUser):
 class SocialNetwork(models.Model):
     name = models.CharField(max_length=15, unique=True)
     website = models.URLField()
-    image = models.ImageField(upload_to='logos_socialnetworks')
+    image = models.ImageField(upload_to='logos_socialnetworks', null=True, blank=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -24,8 +26,14 @@ class SocialNetwork(models.Model):
 class SocialNetworkUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='social_networks')
     social_network = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE, related_name='social_networks_user')
-    username = models.CharField(max_length=15)
-    url = models.URLField()
+    username = models.CharField(max_length=15, null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+
+    # class Meta:
+    #     unique_together = [('user', 'social_network')] # Esto no le gusta
+
+    class Meta:
+        constraints = [UniqueConstraint(fields=['user', 'social_network'], name='social_user_unique')]
 
     def __str__(self):
         return f'{self.user} - {self.social_network} ({self.username})'

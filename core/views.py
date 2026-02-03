@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import User, SocialNetworkUser, SocialNetwork, Keyboard
-from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm
+from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm, SocialNetworkUserForm
 from django.db.models import Max
 from django.views.generic import DeleteView, CreateView, ListView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 def home(request):
     return render(request, 'core/home.html')
 
@@ -149,3 +150,23 @@ class UpdateKeyboard(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('user_profile', kwargs={'username':self.request.user})
+    
+class CreateSocialNetworkUser(CreateView):
+    model = SocialNetworkUser
+    template_name = 'core/add_networksocial_user.html'
+    form_class = SocialNetworkUserForm
+
+    def get_success_url(self):
+        return reverse_lazy('user_profile', kwargs={'username':self.request.user})
+
+    def form_valid(self, form):
+        print('HE ENTRADO AL FORMVALID!!!!!!!')
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        try:
+            self.object.save()
+        except:
+            messages.error(self.request, "Esta red social ya la tienes añadida!")
+            return redirect('add_socialnetwork')
+        return redirect(self.get_success_url())
+    

@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Add new network social{% endblock %}
+{% block tittle_section %}Add new network social{% endblock %}
+
+
+{% block content %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_div}}
+    <button type="submit">Add</button>
+</form>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="{{ message.tags }}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% endblock %}

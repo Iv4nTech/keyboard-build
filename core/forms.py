@@ -37,3 +37,8 @@ class CreateKeyboardForm(forms.ModelForm):
                 'type':'color'
             })
         }
+
+class SocialNetworkUserForm(forms.ModelForm):
+    class Meta:
+        model = SocialNetworkUser
+        fields = ['social_network']
