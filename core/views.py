@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import User, SocialNetworkUser, SocialNetwork, Keyboard, Component, KeyboardComponent
+from .models import User, SocialNetworkUser, SocialNetwork, Keyboard, Component, KeyboardComponent, Level, GetLevel
 from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm
 from django.db.models import Max
 from django.views.generic import DeleteView, CreateView, ListView, DetailView, UpdateView, TemplateView
@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import logout
 from django.http import HttpResponseForbidden
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 def home(request):
     return render(request, 'core/home.html')
 
@@ -107,6 +108,29 @@ class CreateKeyboard(CreateView):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
+
+        #Cogemos el nivel maximo del usuario
+
+        user_data = GetLevel.objects.filter(user=self.object.user).aggregate(max_lvl=Max('level__number'))
+        
+        #Guardamos en una variable el numero y sumamos uno
+        current_num = user_data['max_lvl'] or 0
+        next_num = current_num + 1
+
+        #Si no existe try
+        try:
+            level = Level.objects.get(number=next_num)
+        except Level.DoesNotExist:
+            level = Level.objects.create(
+                number=next_num
+            )
+
+        # Y ahora lo creamos
+        GetLevel.objects.create(
+            user=self.object.user,
+            level=level
+        )
+        
         return super().form_valid(form)
     
     def get_success_url(self):

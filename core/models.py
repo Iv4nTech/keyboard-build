@@ -39,7 +39,7 @@ class SocialNetworkUser(models.Model):
         return f'{self.user} - {self.social_network} ({self.username})'
 
 class Level(models.Model):
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, null=True, blank=True)
     number = models.IntegerField()
     colour = models.CharField(max_length=16, null=True, blank=True) #Hexadecimal irá aquí esto luego habrá que validarlo
     emblem = models.ImageField(upload_to='emblem/', null=True, blank=True)
@@ -50,7 +50,7 @@ class Level(models.Model):
 class GetLevel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='levels')
     level = models.ForeignKey(Level, on_delete=models.CASCADE, default=0, related_name='detail')
-    datetime_get = models.DateTimeField()
+    datetime_get = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user} obtuvo el nivel {self.level} a las {self.datetime_get}'
