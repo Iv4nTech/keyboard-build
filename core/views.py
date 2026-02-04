@@ -57,11 +57,11 @@ def configuration_user(request):
             last_name = form.cleaned_data['last_name']
 
             if social_network:
-                SocialNetworkUser.objects.update_or_create(
-                    user=user,
-                    social_network = social_network,
-                    defaults={'username':username_network, 'url':url},
-                )
+                obj, creado =  SocialNetworkUser.objects.update_or_create(
+                        user=user,
+                        social_network = social_network,
+                        defaults={'username':username_network, 'url':url},
+                    )
 
             user.bio = bio
             user.image = image
@@ -179,3 +179,18 @@ class CreateSocialNetworkUser(TemplateView):
             messages.error(self.request, "Esta red social ya la tienes añadida!")
             return redirect('add_socialnetwork')
         return redirect(self.get_success_url())
+
+class DeleteNetworkSocial(DeleteView):
+    model = SocialNetworkUser
+    context_object_name = 'social_network'
+    template_name = 'core/delete_network_social.html'
+    success_url = reverse_lazy('configuration_user')
+
+    def form_valid(self, form):
+
+        keyboard_delete = self.get_object()
+
+        if keyboard_delete.user != self.request.user:
+            return HttpResponseForbidden('You not cant eliminate network social by another user')
+
+        return super().form_valid(form)

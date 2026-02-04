@@ -11,9 +11,9 @@
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
-        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div id="form-configuration" style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem;">
             {{form.as_div}} 
-            <a href="{% url 'add_socialnetwork' %}" class="btn">Add social network</a>
+            <a href="{% url 'add_socialnetwork' %}" class="btn btn-ghost">Add social network</a>
             </div>
 
         <button type="submit" class="btn" style="width: 100%; font-size: 1.1rem; padding: 1rem;">
@@ -33,13 +33,20 @@
 
 </div>
 
-<div class="hidden">
+<div class="hidden" id="div-info">
     {% for network in network_social %}
-    <h1 id="name-{{network.social_network.name}}">{{network.social_network.name}}</h1>
-    <p id="username-{{network.social_network.name}}">{{network.username}}</p>
-    <p id="url-{{network.social_network.name}}">{{network.url}}</p>
+    <h1 id="name-{{network.social_network.name}}" data-key="{{network.id}}">{{network.social_network.name}}</h1>
+    <p id="username-{{network.social_network.name}}" data-key="{{network.id}}">{{network.username}}</p>
+    <p id="url-{{network.social_network.name}}" data-key="{{network.id}}">{{network.url}}</p>
     {% endfor %}
 </div>
 
 <script src="{% static 'js/networks_socials.js' %}"></script>
+<script>
+    const ancoreDeleteV = document.getElementById('ancore-delete')
+
+    ancoreDelete.addEventListener('click', () => {
+    window.location.href = '/profile/networksocial/delete_socialnetwork'
+})
+</script>
 {% endblock %}
