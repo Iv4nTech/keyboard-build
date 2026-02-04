@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import User, SocialNetworkUser, SocialNetwork, Keyboard
+from .models import User, SocialNetworkUser, SocialNetwork, Keyboard, Component, KeyboardComponent
 from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm
 from django.db.models import Max
 from django.views.generic import DeleteView, CreateView, ListView, DetailView, UpdateView, TemplateView
@@ -194,3 +194,33 @@ class DeleteNetworkSocial(DeleteView):
             return HttpResponseForbidden('You not cant eliminate network social by another user')
 
         return super().form_valid(form)
+    
+# AHORA VIENE LO TOCHO
+
+class ViewKeyboardComponents(ListView):
+    model = KeyboardComponent
+    context_object_name = 'components'
+    template_name = 'core/view_keyboard_components.html'
+
+
+    def get_queryset(self):
+        return KeyboardComponent.objects.filter(keyboard__id=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyboard'] = get_object_or_404(Keyboard, id=self.kwargs['pk'])
+        return context
+
+class DetailComponent(DetailView):
+    model = Component
+    context_object_name = 'component'
+    template_name = 'core/detail_component.html'
+
+    def get_object(self, queryset=None):
+        keyboard_id = self.kwargs.get('pk_k')
+        component_id = self.kwargs.get('pk')
+        return get_object_or_404(
+            Component, 
+            id=component_id, 
+            builds__keyboard__id=keyboard_id
+        )

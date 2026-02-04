@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block tittle_bar %}View components{% endblock %}
+{% block tittle_section %}Components of keyboard #{{keyboard.id}} {{ keyboard.name|default:"Name not available" }} {% endblock %}
+
+{% block content %}
+
+
+    <div class="user-grid">
+        {% for component in components %}
+        <a href="{% url 'detail_components' pk_k=keyboard.id pk=component.component.pk %}">
+        <li class="product-card component-card">
+            <div class="product-header">
+                <div>
+                    <span class="component-type-badge">{{ component.component.get_type_display|default:component.component.type }}</span>
+                    <h3 class="product-title">{{ component.component.brand }}</h3>
+                </div>
+                <span class="price-tag">${{ component.component.price }}</span>
+            </div>
+            
+            <p class="component-model">{{ component.component.model }}</p>
+            
+            <div class="product-divider"></div>
+            
+            <div class="product-footer">
+                <span class="product-label">Purchase Link</span>
+                <a href="{{ component.component.shopping_website }}" target="_blank" class="pill-tag link-action">
+                    Visit Store <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+        </li>
+        </a>
+        {% empty %}
+        <div class="empty-state">
+            <p>This keyboard not have components.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

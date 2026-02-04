@@ -67,22 +67,27 @@ class Keyboard(models.Model):
         return f'{self.name} ({self.price}€)'
 
 class Component(models.Model):
+
+    class ComponentType(models.TextChoices):
+        KEYCAPS = 'KC', 'Keycaps'
+        CASE = 'CS', 'Case'
+        PLATE = 'PL', 'Plate'
+        PCB = 'PB', 'PCB'
+        SWITCH = 'SW', 'Switch'
+
     brand = models.CharField(max_length=25)
     model = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     shopping_website = models.URLField()
-    keycaps = models.OneToOneField('Keycaps', on_delete=models.CASCADE, null=True, blank=True)
-    case = models.OneToOneField('Case', on_delete=models.CASCADE, null=True, blank=True)
-    plate = models.OneToOneField('Plate', on_delete=models.CASCADE, null=True, blank=True)
-    pcb = models.OneToOneField('Pcb', on_delete=models.CASCADE, null=True, blank=True)
+    type = models.CharField(max_length=2, choices=ComponentType, null=True, blank=True)
 
     def __str__(self):
         return f'{self.brand}: {self.model} {self.price}'
 
 class KeyboardComponent(models.Model):
     keyboard = models.ForeignKey(Keyboard, on_delete=models.CASCADE)
-    component = models.ForeignKey(Component, on_delete=models.CASCADE)
-    date_modification = models.DateField()
+    component = models.ForeignKey(Component, on_delete=models.CASCADE, related_name='builds')
+    date_modification = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.component} se modifico en {self.keyboard} a las {self.date_modification}'

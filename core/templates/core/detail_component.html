@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block tittle_bar %}Detail component {{component.model}} #{{component.pk}}{% endblock %}
+{% block tittle_section %}Detail {{component.get_type_display}}{% endblock %}
+
+{% block content %}
+<main class="detail-container">
+    <div class="detail-card">
+        <div class="profile-glow-effect"></div>
+
+        <header class="detail-header-large">
+            <span class="component-type-badge" style="font-size: 1rem; margin-bottom: 0;">
+                {{ component.get_type_display }}
+            </span>
+            <h1 class="detail-title">{{ component.brand }}</h1>
+            <p class="profile-bio" style="margin-bottom: 0;">{{ component.model }}</p>
+            
+            <div class="price-tag-large">
+                ${{ component.price }}
+            </div>
+        </header>
+
+        <div class="detail-body">
+            <div class="detail-row">
+                <span class="detail-label">Brand / Manufacturer</span>
+                <span class="detail-value">{{ component.brand }}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Model Name</span>
+                <span class="detail-value">{{ component.model }}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Category</span>
+                <span class="detail-value">{{ component.get_type_display}}</span>
+            </div>
+    </div>
+</main>
+{% endblock %}
