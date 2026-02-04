@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import User, SocialNetworkUser, SocialNetwork, Keyboard
-from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm, SocialNetworkUserForm
+from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm
 from django.db.models import Max
-from django.views.generic import DeleteView, CreateView, ListView, DetailView, UpdateView
+from django.views.generic import DeleteView, CreateView, ListView, DetailView, UpdateView, TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
 from django.http import HttpResponseForbidden
@@ -151,16 +151,26 @@ class UpdateKeyboard(UpdateView):
     def get_success_url(self):
         return reverse_lazy('user_profile', kwargs={'username':self.request.user})
     
-class CreateSocialNetworkUser(CreateView):
-    model = SocialNetworkUser
+class CreateSocialNetworkUser(TemplateView):
     template_name = 'core/add_networksocial_user.html'
-    form_class = SocialNetworkUserForm
 
     def get_success_url(self):
         return reverse_lazy('user_profile', kwargs={'username':self.request.user})
 
+    def post(self, request):
+        social_network = request.POST.get('social-networks')
+        print(social_network)
+        obj_social_network = SocialNetwork.objects.get(name=social_network)
+        SocialNetworkUser.objects.create(user=request.user,social_network=obj_social_network )
+        return redirect(self.get_success_url())
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['social_networks'] = SocialNetwork.objects.exclude(social_networks_user__user=self.request.user)
+        return context
+    
     def form_valid(self, form):
-        print('HE ENTRADO AL FORMVALID!!!!!!!')
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         try:
@@ -169,4 +179,3 @@ class CreateSocialNetworkUser(CreateView):
             messages.error(self.request, "Esta red social ya la tienes añadida!")
             return redirect('add_socialnetwork')
         return redirect(self.get_success_url())
-    

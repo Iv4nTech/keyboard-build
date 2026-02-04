@@ -7,7 +7,12 @@
 {% block content %}
 <form action="" method="POST">
     {% csrf_token %}
-    {{form.as_div}}
+    <select name="social-networks" id="social-networks">
+      <option value="----------">--------</option>
+      {% for social in social_networks %}
+        <option value="{{social.name}}">{{social.name}}</option>
+      {% endfor %}
+    </select>
     <button type="submit">Add</button>
 </form>
 

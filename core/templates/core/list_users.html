@@ -23,10 +23,9 @@
         <a href="{% url 'user_profile' user.username %}" style="display: flex; align-items: center; gap: 15px; width: 100%;">
             <div class="user-initial">
                 {% if user.image %}
-                <img class="avatar" id="image-profile" src="{% url '{{user.image.url}}' %}" alt="Logo {{user.username}}">
-                {{ user.image.url }}
+                <img class="avatar"  src="{{user.image.url}}" alt="Logo {{user.username}}">
                 {% else %}
-                <img class="avatar" id="image-profile" src="{% static 'images/logo-default.jpg' %}" alt="Logo default">
+                <img class="avatar" src="{% static 'images/logo-default.jpg' %}" alt="Logo default">
                 {% endif %}
             </div>
             <div>
