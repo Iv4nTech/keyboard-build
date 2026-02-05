@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import home, user_profile, list_users, home, registration,ranking_users, configuration_user, UserDeleteView, CreateKeyboard, ViewKeyboard, DetailKeyboard, DeleteKeyboard, UpdateKeyboard, CreateSocialNetworkUser, DeleteNetworkSocial, ViewKeyboardComponents, DetailComponent
+from .views import home, user_profile, list_users, home, registration,ranking_users, configuration_user, UserDeleteView, CreateKeyboard, ViewKeyboard, DetailKeyboard, DeleteKeyboard, UpdateKeyboard, CreateSocialNetworkUser, DeleteNetworkSocial, ViewKeyboardComponents, DetailKeyboardComponent, CreateKeyboardComponent, UpdateKeyboardComponent
 urlpatterns = [
     path('', home, name='hello'),
     path('home/', home, name='home'),
@@ -18,6 +18,8 @@ urlpatterns = [
     path('profile/networksocial/add_socialnetwork', CreateSocialNetworkUser.as_view(), name='add_socialnetwork'),
     path('profile/networksocial/delete_socialnetwork/<int:pk>', DeleteNetworkSocial.as_view(), name='delete_socialnetwork'),
     path('detail/keyboard/<int:pk>/view/components', ViewKeyboardComponents.as_view(), name='view_components'),
-    path('detail/keyboard/<int:pk_k>/detail/component/<int:pk>', DetailComponent.as_view() , name='detail_components')
+    path('detail/keyboard/<int:pk_k>/detail/component/<int:pk>', DetailKeyboardComponent.as_view() , name='detail_components'),
+    path('detail/keyboard/<int:pk>/create/component', CreateKeyboardComponent.as_view(), name='create_component'),
+    path('detail/keyboard/<int:pk_k>/update/component/<int:pk>', UpdateKeyboardComponent.as_view(), name='update_component')
 
 ]

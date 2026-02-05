@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import User, SocialNetworkUser, SocialNetwork, Keyboard, Component, KeyboardComponent, Level, GetLevel
-from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm
+from .forms import RegisterUserForm, ConfigurateUserForm, CreateKeyboardForm, CreateKeyboardComponentForm, UpdateKeyboardComponentForm
 from django.db.models import Max
 from django.views.generic import DeleteView, CreateView, ListView, DetailView, UpdateView, TemplateView
 from django.urls import reverse_lazy
@@ -244,7 +244,7 @@ class ViewKeyboardComponents(ListView):
         context['keyboard'] = get_object_or_404(Keyboard, id=self.kwargs['pk'])
         return context
 
-class DetailComponent(DetailView):
+class DetailKeyboardComponent(DetailView):
     model = Component
     context_object_name = 'component'
     template_name = 'core/detail_component.html'
@@ -257,3 +257,56 @@ class DetailComponent(DetailView):
             id=component_id, 
             builds__keyboard__id=keyboard_id
         )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyboard'] = Keyboard.objects.get(pk=self.kwargs['pk_k'])
+        return context
+    
+class CreateKeyboardComponent(CreateView):
+    model = Component
+    template_name = 'core/create_component.html'
+    form_class = CreateKeyboardComponentForm
+
+    def form_valid(self, form):
+        
+        # Crear componente
+
+        obj_component = Component.objects.create(brand=form.cleaned_data['brand'], model=form.cleaned_data['model'], price=form.cleaned_data['price'], shopping_website=form.cleaned_data['shopping_website'], type=form.cleaned_data['type'])
+
+        # Cogemos el teclado donde lo estamos creando
+        obj_keyboard = Keyboard.objects.get(pk=self.kwargs['pk'])
+
+        # Ahora creamos tabla intermedia
+
+        obj_keyboard_component = KeyboardComponent.objects.create(keyboard=obj_keyboard, component=obj_component)
+        
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyboard'] = Keyboard.objects.get(id=self.kwargs['pk'])
+        return context
+    
+    def get_success_url(self):
+        return reverse_lazy('view_components', kwargs={'pk':self.kwargs['pk']})
+    
+class UpdateKeyboardComponent(UpdateView):
+    model = Component
+    template_name = 'core/update_keyboard_component.html'
+    form_class = CreateKeyboardComponentForm
+    context_object_name = 'component'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Component, 
+            pk=self.kwargs['pk'], 
+            builds__keyboard__pk=self.kwargs['pk_k']
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyboard'] = get_object_or_404(Keyboard, pk=self.kwargs['pk_k'])
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('view_components', kwargs={'pk': self.kwargs['pk_k']})

@@ -36,6 +36,7 @@
                 <span class="detail-label">Category</span>
                 <span class="detail-value">{{ component.get_type_display}}</span>
             </div>
+            <a href="{% url 'update_component' pk_k=keyboard.pk pk=component.pk %}" class="btn">Update</a>
     </div>
 </main>
 {% endblock %}

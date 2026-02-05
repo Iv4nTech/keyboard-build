@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Case, Component, GetLevel, Keyboard, KeyboardComponent, Keycaps, Level, Pcb, Plate, SocialNetwork, SocialNetworkUser, Switch, User
+from .models import Component, GetLevel, Keyboard, KeyboardComponent,  Level, SocialNetwork, SocialNetworkUser, User
 from django.contrib.auth.admin import UserAdmin
 
 class UserLevelIntermediate(admin.StackedInline):
@@ -19,16 +19,16 @@ class CustomUserAdmin(UserAdmin):
     inlines = [UserLevelIntermediate]
 
 
-admin.site.register(Case)
+# admin.site.register(Case)
 admin.site.register(Component)
 admin.site.register(GetLevel)
 admin.site.register(Keyboard)
 admin.site.register(KeyboardComponent)
-admin.site.register(Keycaps)
+# admin.site.register(Keycaps)
 admin.site.register(Level)
-admin.site.register(Pcb)
-admin.site.register(Plate)
+# admin.site.register(Pcb)
+# admin.site.register(Plate)
 admin.site.register(SocialNetwork)
 admin.site.register(SocialNetworkUser)
-admin.site.register(Switch)
+# admin.site.register(Switch)
 admin.site.register(User, CustomUserAdmin)

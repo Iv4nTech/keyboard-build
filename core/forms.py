@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, SocialNetworkUser, SocialNetwork, Keyboard
+from .models import User, SocialNetworkUser, SocialNetwork, Keyboard, Component, KeyboardComponent
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
@@ -37,3 +37,13 @@ class CreateKeyboardForm(forms.ModelForm):
                 'type':'color'
             })
         }
+
+class CreateKeyboardComponentForm(forms.ModelForm):
+    class Meta:
+        model = Component
+        fields = ['brand', 'model', 'price', 'shopping_website', 'type']
+
+class UpdateKeyboardComponentForm(forms.ModelForm):
+    class Meta:
+        model = KeyboardComponent
+        fields = ['keyboard', 'component']

@@ -61,7 +61,7 @@ class Keyboard(models.Model):
     price = models.DecimalField(max_digits=9, decimal_places=2) #Un teclado puede costar máximo 1M€
     stars = models.DecimalField(max_digits=2, decimal_places=1) # Para las estrellas del 1 al 5
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='keyboards')
-    component = models.ManyToManyField('Component', through='KeyboardComponent', related_name='components')
+    component = models.ManyToManyField('Component', through='KeyboardComponent', related_name='keyboards')
 
     def __str__(self):
         return f'{self.name} ({self.price}€)'
@@ -92,48 +92,48 @@ class KeyboardComponent(models.Model):
     def __str__(self):
         return f'{self.component} se modifico en {self.keyboard} a las {self.date_modification}'
 
-class Keycaps(models.Model):
-    material = models.CharField(max_length=15, null=True, blank=True)
-    layaut = models.CharField(max_length=6, null=True, blank=True)
-    colours = models.CharField(max_length=48, null=True, blank=True)
-    profile = models.CharField(max_length=10, null=True, blank=True)
+# class Keycaps(models.Model):
+#     material = models.CharField(max_length=15, null=True, blank=True)
+#     layaut = models.CharField(max_length=6, null=True, blank=True)
+#     colours = models.CharField(max_length=48, null=True, blank=True)
+#     profile = models.CharField(max_length=10, null=True, blank=True)
 
-    def __str__(self):
-        return f'{self.material}'
+#     def __str__(self):
+#         return f'{self.material}'
 
-class Case(models.Model):
-    material = models.CharField(max_length=15, null=True, blank=True)
-    colours = models.CharField(max_length=48, null=True, blank=True)
-    measures = models.CharField(max_length=30, null=True, blank=True)
+# class Case(models.Model):
+#     material = models.CharField(max_length=15, null=True, blank=True)
+#     colours = models.CharField(max_length=48, null=True, blank=True)
+#     measures = models.CharField(max_length=30, null=True, blank=True)
 
-    def __str__(self):
-        return f'{self.material}'
+#     def __str__(self):
+#         return f'{self.material}'
 
-class Plate(models.Model):
-    material = models.CharField(max_length=15, null=True, blank=True)
-    measures = models.CharField(max_length=30, null=True, blank=True)
+# class Plate(models.Model):
+#     material = models.CharField(max_length=15, null=True, blank=True)
+#     measures = models.CharField(max_length=30, null=True, blank=True)
 
-    def __str__(self):
-        return f'{self.material}'
+#     def __str__(self):
+#         return f'{self.material}'
 
-class Pcb(models.Model):
-    connectivity = models.CharField(max_length=50, null=True, blank=True) #Esto cambiarlo por un TEXTCHOICES
-    measures = models.CharField(max_length=30, null=True, blank=True)
-    layaut = models.CharField(max_length=10, null=True, blank=True)
-    rgb = models.BooleanField(default=True)
-    hotswap = models.BooleanField(default=True)
-    firmware = models.CharField(max_length=10, null=True, blank=True)
+# class Pcb(models.Model):
+#     connectivity = models.CharField(max_length=50, null=True, blank=True) #Esto cambiarlo por un TEXTCHOICES
+#     measures = models.CharField(max_length=30, null=True, blank=True)
+#     layaut = models.CharField(max_length=10, null=True, blank=True)
+#     rgb = models.BooleanField(default=True)
+#     hotswap = models.BooleanField(default=True)
+#     firmware = models.CharField(max_length=10, null=True, blank=True)
 
-    def __str__(self):
-        return f'RGB: {self.rgb} Hotswap: {self.hotswap}'
+#     def __str__(self):
+#         return f'RGB: {self.rgb} Hotswap: {self.hotswap}'
 
-class Switch(models.Model):
-    type = models.CharField(max_length=25) #Esto será un textchoices
-    force = models.DecimalField(max_digits=5, decimal_places=2)
-    point = models.DecimalField(max_digits=5, decimal_places=2)
-    route = models.DecimalField(max_digits=5, decimal_places=2)
-    useful_life = models.IntegerField()
-    pin_number = models.IntegerField() #Esto podria ser un integer choices 
+# class Switch(models.Model):
+#     type = models.CharField(max_length=25) #Esto será un textchoices
+#     force = models.DecimalField(max_digits=5, decimal_places=2)
+#     point = models.DecimalField(max_digits=5, decimal_places=2)
+#     route = models.DecimalField(max_digits=5, decimal_places=2)
+#     useful_life = models.IntegerField()
+#     pin_number = models.IntegerField() #Esto podria ser un integer choices 
 
-    def __str__(self):
-        return f'{self.type}'
+#     def __str__(self):
+#         return f'{self.type}'
