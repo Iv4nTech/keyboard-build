@@ -29,6 +29,7 @@
                     {% endif %}
                     
                     <nav class="dropdown" id="nav-user" hidden>
+                        <strong style="padding: 10px;margin-left: 6px;">@{{user.username}}</strong>
                         <a href="{% url 'user_profile' user.username %}">My profile</a>
                         <a href="{% url 'configuration_user' %}">Configuration</a>
                         <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 5px;">

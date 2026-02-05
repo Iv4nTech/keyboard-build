@@ -2,6 +2,14 @@
 {% block tittle_bar %}Register{% endblock %}
 {% block tittle_section %}Register{% endblock %}
 {% block content %}
+{% if messages %}
+{% for message in messages %}
+<div class=" message {{message.tags}}">
+    {{message}}
+
+</div>
+{% endfor %}
+{% endif %}
 <form action="" method="post">
     {% csrf_token %}
     {{form.as_div}}

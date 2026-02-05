@@ -9,6 +9,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.mixins import LoginRequiredMixin
 def home(request):
     return render(request, 'core/home.html')
 
@@ -38,7 +39,12 @@ def registration(request):
         if form.is_valid():
             form.save()
             print('Formulario guardado!')
-            return redirect('list_users')
+            messages.success(request,'Register success!')
+            return redirect('home')
+        for error in form.errors.as_data().values():
+            for e in error: # Acceder a cada fallo
+                print(f'ERROR:{e.message}') 
+                messages.error(request, e.message)
     form = RegisterUserForm()
     return render(request, 'registration/registration.html', {'form':form})
 
@@ -70,9 +76,10 @@ def configuration_user(request):
             user.last_name = last_name
             user.dateofbirth = dateofbirth
             user.save()
+            messages.success(request, 'La configuración se ha guardado correctamente')
 
             #Aqui poner que lleva a la misma pagina pero que le salte una messages
-            return redirect('list_users')
+            return redirect('configuration_user')
         else:
             print(form.errors.as_data())
     data_initial = {'bio':user.bio,
@@ -142,7 +149,9 @@ class ViewKeyboard(ListView):
     context_object_name = 'keyboards'
 
     def get_queryset(self):
-        return Keyboard.objects.filter(user=self.request.user)
+        print(self.kwargs['username'])
+        queryset = Keyboard.objects.filter(user__username=self.kwargs['username'])
+        return queryset
     
 class DetailKeyboard(DetailView):
     model = Keyboard

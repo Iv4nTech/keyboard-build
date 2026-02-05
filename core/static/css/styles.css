@@ -787,13 +787,13 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .messages-container {
     position: fixed;
     top: 100px; /* Debajo del header */
-    right: 20px;
+    right: 50px;
     z-index: 1000;
     width: 100%;
     max-width: 400px;
-    display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-left: 50px;
 }
 
 .message {
@@ -809,12 +809,18 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     justify-content: space-between;
     overflow: hidden;
     animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 70%;
 }
 
 /* Estilo específico para ERROR */
 .message.error {
     border-left: 4px solid var(--danger); /* Rojo de tu paleta */
     background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, var(--bg-card) 100%);
+}
+
+.message.success {
+    border-left: 4px solid rgb(71, 255, 71); /* Rojo de tu paleta */
+    background: linear-gradient(90deg, rgba(117, 239, 68, 0.1) 0%, var(--bg-card) 100%);
 }
 
 .message.error i, .message.error .message-icon {

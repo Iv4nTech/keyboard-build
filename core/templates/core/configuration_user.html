@@ -6,6 +6,13 @@
 
 {% block content %}
 
+{% if messages %}
+    {% for message in messages %}
+        <div class="message {{message.tags}}">
+            {{message}}
+        </div>
+    {% endfor %}
+{% endif %}
 <div style="max-width: 600px; margin: 0 auto; background-color: var(--bg-card); padding: 2.5rem; border-radius: 1.5rem; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
     
     <form action="" method="post" enctype="multipart/form-data">
@@ -40,6 +47,7 @@
     <p id="url-{{network.social_network.name}}" data-key="{{network.id}}">{{network.url}}</p>
     {% endfor %}
 </div>
+
 
 <script src="{% static 'js/networks_socials.js' %}"></script>
 <script>
