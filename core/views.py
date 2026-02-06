@@ -268,23 +268,19 @@ class CreateKeyboardComponent(CreateView):
     form_class = CreateKeyboardComponentForm
 
     def form_valid(self, form):
+ 
+        componente = form.save()
         
-        # Crear componente
+        teclado = get_object_or_404(Keyboard, pk=self.kwargs['pk'])
 
-        obj_component = Component.objects.create(brand=form.cleaned_data['brand'], model=form.cleaned_data['model'], price=form.cleaned_data['price'], shopping_website=form.cleaned_data['shopping_website'], type=form.cleaned_data['type'])
-
-        # Cogemos el teclado donde lo estamos creando
-        obj_keyboard = Keyboard.objects.get(pk=self.kwargs['pk'])
-
-        # Ahora creamos tabla intermedia
-
-        obj_keyboard_component = KeyboardComponent.objects.create(keyboard=obj_keyboard, component=obj_component)
+        KeyboardComponent.objects.create(keyboard=teclado, component=componente)
         
-        return super().form_valid(form)
+     
+        return redirect(self.get_success_url())
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['keyboard'] = Keyboard.objects.get(id=self.kwargs['pk'])
+        context['keyboard'] = get_object_or_404(Keyboard, id=self.kwargs['pk'])
         return context
     
     def get_success_url(self):
@@ -312,20 +308,21 @@ class UpdateKeyboardComponent(UpdateView):
         return reverse_lazy('view_components', kwargs={'pk': self.kwargs['pk_k']})
     
 class DeleteKeyboardComponent(DeleteView):
-    model = Component
-    context_object_name =  'component'
+    model = KeyboardComponent 
+    context_object_name = 'keyboardcomponent'
     template_name = 'core/delete_component.html'
 
     def get_object(self, queryset=None):
         return get_object_or_404(
-            Component, 
-            pk=self.kwargs['pk'], 
-            builds__keyboard__pk=self.kwargs['pk_k']
+            KeyboardComponent, 
+            component__pk=self.kwargs['pk'], 
+            keyboard__pk=self.kwargs['pk_k']
         )
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['keyboard'] = get_object_or_404(Keyboard, pk=self.kwargs['pk_k'])
+        context['component'] = self.get_object().component
         return context
     
     def get_success_url(self):
