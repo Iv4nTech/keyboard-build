@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Report general{% endblock %}
+{% block tittle_section %}Report general{% endblock %}
+
+{% block content %}
+<div class="glow-bg"></div>
+
+<main class="section-container">
+    <h1 class="page-title">Stats community</h1>
+
+    <div class="metrics-grid">
+        <div class="data-highlight">
+            <span class="data-subtext">Recorded money in keyboards</span>
+            <span class="data-value-large">${{ stats.total_money_invested|default:"0" }}</span>
+        </div>
+
+        <div class="data-highlight">
+            <span class="data-subtext">Average cost per construction</span>
+            <span class="data-value-large">${{ stats.price_avg }}</span>
+        </div>
+
+        <div class="data-highlight">
+            <span class="data-subtext">Keyboards uniques</span>
+            <span class="data-value-large">{{ stats.total_keyboards }}</span>
+        </div>
+    </div>
+
+    <div class="user-grid">
+        
+        <section class="ranking-list">
+            <div class="section-header" style="padding: 1.5rem;">
+                <h2 class="section-title">Brands more used</h2>
+            </div>
+            {% for brand in brands_popular %}
+            <div class="ranking-item">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span class="ranking-badge">#{{ forloop.counter }}</span>
+                    <span style="font-weight: 600; font-size: 1.1rem;">{{ brand.brand }}</span>
+                </div>
+                <span class="text-main">{{ brand.count_used }} Builds</span>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+
+    <section class="section-spacer">
+        <div class="section-header">
+            <h2 class="section-title">Top 3 keyboards pro</h2>
+        </div>
+        <div class="user-grid">
+            {% for kb in keyboards_pro %}
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-title">{{ kb.name }}</span>
+                    <span class="price-tag">{{ kb.stars }} ★</span>
+                </div>
+                <div class="product-divider"></div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="detail-label">{{ kb.num_components }} componenents</span>
+                    <span class="component-type-badge">Owner: {{kb.user}}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

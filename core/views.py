@@ -11,6 +11,8 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .funtions_aux import data_paginator
+from django.db.models import Avg, Count, Sum
+
 def home(request):
     return render(request, 'core/home.html')
 
@@ -374,3 +376,27 @@ class DeleteKeyboardComponent(DeleteView):
         component = self.get_context_data()['component']
         messages.success(self.request, f'Delete component #{component.id} {component.model} ({component.get_type_display()}) of keyboard #{keyboard.id} {keyboard.name}')
         return reverse_lazy('view_components', kwargs={'pk': self.kwargs['pk_k']})
+    
+def report_general(request):
+    stats = Keyboard.objects.aggregate(
+        total_money_invested=Sum('price'),
+        price_avg=Avg('price'),
+        total_keyboards=Count('id'),
+        max_starss=Max('stars')
+    )
+
+    brands_popular = Component.objects.values('brand').annotate(
+        count_used=Count('builds')
+    ).order_by('-count_used')[:5]
+
+    keyboards_pro = Keyboard.objects.annotate(
+        num_components=Count('component')
+    ).order_by('-num_components')[:3]
+
+    context = {
+        'stats': stats,
+        'brands_popular': brands_popular,
+        'keyboards_pro': keyboards_pro,
+    }
+
+    return render(request, 'core/report_general.html', context)
