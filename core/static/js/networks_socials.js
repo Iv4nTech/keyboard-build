@@ -31,7 +31,14 @@ select.addEventListener('change', (event) => {
     if (indexSelect != 0) {
         inputUrl.value = document.getElementById(`url-${nameNetwork}`).textContent;
         inputUsername.value = document.getElementById(`username-${nameNetwork}`).textContent;
-        console.log(inputUsername);
+        console.log(inputUsername.value);
+        if (inputUrl.value == 'None') {
+            inputUrl.value = "";
+
+        }
+        if (inputUsername.value == 'None') {
+            inputUsername.value = "";
+        }
         inputUrl.disabled = false;
         inputUsername.disabled = false;
         inputUrl.after(ancoreDelete);

@@ -67,7 +67,7 @@ def configuration_user(request):
             last_name = form.cleaned_data['last_name']
 
             if social_network:
-                obj, creado =  SocialNetworkUser.objects.update_or_create(
+                obj, create =  SocialNetworkUser.objects.update_or_create(
                         user=user,
                         social_network = social_network,
                         defaults={'username':username_network, 'url':url},

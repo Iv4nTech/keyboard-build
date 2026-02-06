@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from .views import home, user_profile, list_users, home, registration,ranking_users, configuration_user, UserDeleteView, CreateKeyboard, ViewKeyboard, DetailKeyboard, DeleteKeyboard, UpdateKeyboard, CreateSocialNetworkUser, DeleteNetworkSocial, ViewKeyboardComponents, DetailKeyboardComponent, CreateKeyboardComponent, UpdateKeyboardComponent, DeleteKeyboardComponent, report_general
 urlpatterns = [
-    path('home/', home, name='home'),
+    path('', home, name='home'),
     path('report_general/', report_general, name='report_general'),
     path('list/users/', list_users, name='list_users'),
     path('accounts/registration/', registration, name='registration'),
