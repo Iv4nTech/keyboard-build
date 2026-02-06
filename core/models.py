@@ -61,6 +61,7 @@ class Keyboard(models.Model):
     price = models.DecimalField(max_digits=9, decimal_places=2) #Un teclado puede costar máximo 1M€
     stars = models.DecimalField(max_digits=2, decimal_places=1) # Para las estrellas del 1 al 5
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='keyboards')
+    image = models.ImageField(upload_to='keyboards/', null=True, blank=True)
     component = models.ManyToManyField('Component', through='KeyboardComponent', related_name='keyboards')
 
     def __str__(self):
@@ -79,6 +80,7 @@ class Component(models.Model):
     model = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     shopping_website = models.URLField()
+    image = models.ImageField(upload_to='components/', null=True, blank=True)
     type = models.CharField(max_length=2, choices=ComponentType, null=True, blank=True)
 
     def __str__(self):
