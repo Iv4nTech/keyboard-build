@@ -10,17 +10,20 @@ from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from .funtions_aux import data_paginator
 from django.db.models import Avg, Count, Sum
 
 def home(request):
     return render(request, 'core/home.html')
 
+@login_required
 def user_profile(request, username):
     user = User.objects.get(username=username)
     keyboards = Keyboard.objects.filter(user=user)
     return render(request,'core/user_profile.html', {'user_profile':user, 'keyboards':keyboards})
 
+@login_required
 def list_users(request):
     users = User.objects.all()
     username = request.GET.get('username')
@@ -32,6 +35,7 @@ def list_users(request):
         users = users.filter(max_level__gte=level)
     return render(request, 'core/list_users.html', {'page_obj':data_paginator(request, users, 10)})
 
+@login_required
 def ranking_users(request):
     users = User.objects.annotate(max_level=Max('levels__level__number')).order_by('-max_level')
     return render(request, 'core/ranking_users.html',  {'page_obj':data_paginator(request, users, 5)})
@@ -382,7 +386,6 @@ def report_general(request):
         total_money_invested=Sum('price'),
         price_avg=Avg('price'),
         total_keyboards=Count('id'),
-        max_starss=Max('stars')
     )
 
     brands_popular = Component.objects.values('brand').annotate(
@@ -400,3 +403,48 @@ def report_general(request):
     }
 
     return render(request, 'core/report_general.html', context)
+
+class ListComponentExists(ListView):
+    model = Component
+    template_name = 'core/list_component_exists.html'
+    context_object_name = 'components'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.GET.get('brand'):
+          queryset = queryset.filter(brand__icontains=self.request.GET.get('brand'))
+        if self.request.GET.get('model'):
+          queryset = queryset.filter(brand__icontains=self.request.GET.get('model'))
+        print(queryset)
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyboard'] = Keyboard.objects.get(pk=self.kwargs['pk'])
+        return context
+    
+class AddComponentExists(CreateView):
+    model = KeyboardComponent
+    template_name = 'core/add_component_exists.html'
+    fields = []
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyboard'] = Keyboard.objects.get(pk=self.kwargs['pk_k'])
+        context['component'] = Component.objects.get(pk=self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+       keyboard_id = self.kwargs['pk_k']
+       component_id = self.kwargs['pk']
+       keyboard_obj = Keyboard.objects.get(id=keyboard_id)
+       component_obj = Component.objects.get(id=component_id)
+       form.instance.keyboard = keyboard_obj
+       form.instance.component = component_obj
+       return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('view_components', kwargs={'pk':self.kwargs['pk_k']})
+    
+    def form_invalid(self, form):
+        print("Errores del formulario:", form.errors.as_data())
+        return super().form_invalid(form)

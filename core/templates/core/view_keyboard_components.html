@@ -47,6 +47,7 @@
     </div>
     {% if user.username == keyboard.user.username %}
     <a href="{% url 'create_component' keyboard.id %}" class="btn">Create component</a>
+    <a href="{% url 'list_component' keyboard.id %}" class="btn">Add component exists</a>
     {% endif %}
 </div>
 {% if page_obj.has_previous %}

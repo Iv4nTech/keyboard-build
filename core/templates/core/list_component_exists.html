@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Add new component exists{% endblock %}
+{% block tittle_section %}Add new component exists{% endblock %}
+
+
+{% block content %}
+
+<form action="" method="get">
+    <label for="brand">Brand</label>
+    <input type="text" name="brand">
+    <label for="brand">Model</label>
+    <input type="text" name="model">
+    <button type="submit">Filter</button>
+    <a href="{% url 'list_component' keyboard.pk %}">Delete filter</a>
+</form>
+
+{% for component in components %}
+{{component.brand}}
+{{component.model}}
+{{component.price}}
+<a href="{% url 'add_component' pk_k=keyboard.pk pk=component.pk  %}">+</a>
+{% endfor %}
+{% endblock %}

@@ -46,4 +46,4 @@ class CreateKeyboardComponentForm(forms.ModelForm):
 class UpdateKeyboardComponentForm(forms.ModelForm):
     class Meta:
         model = KeyboardComponent
-        fields = ['keyboard', 'component']
+        fields = ['component']
