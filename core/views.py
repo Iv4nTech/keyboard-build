@@ -76,7 +76,13 @@ def configuration_user(request):
             user.last_name = last_name
             user.dateofbirth = dateofbirth
             user.save()
-            messages.success(request, 'La configuración se ha guardado correctamente')
+
+            if form.has_changed():
+                 messages.success(request, 'The configuration save correct') # Esto no va ir en la vida porque el form no es conciente
+                 print(form.changed_data)
+            else:
+                messages.info(request, "No changes were detected")
+            
 
             #Aqui poner que lleva a la misma pagina pero que le salte una messages
             return redirect('configuration_user')
@@ -96,7 +102,7 @@ def configuration_user(request):
 
 class UserDeleteView(DeleteView):
     model = User
-    success_url = reverse_lazy('list_users')
+    success_url = reverse_lazy('home')
     template_name = 'core/delete_user.html'
     context_object_name = 'user'
     slug_field = 'username'
@@ -104,6 +110,7 @@ class UserDeleteView(DeleteView):
 
     def form_valid(self, form):
         logout(self.request)
+        messages.success(self.request, 'You user is eliminated correct')
         return super().form_valid(form)
 
 class CreateKeyboard(CreateView):
@@ -133,10 +140,13 @@ class CreateKeyboard(CreateView):
             )
 
         # Y ahora lo creamos
-        GetLevel.objects.create(
+        obj_get_level = GetLevel.objects.create(
             user=self.object.user,
             level=level
         )
+
+        if(obj_get_level):
+            messages.info(self.request, f'You user upgrade a {obj_get_level.level.number} level ')
         
         return super().form_valid(form)
     
@@ -158,6 +168,12 @@ class DetailKeyboard(DetailView):
     context_object_name = 'keyboard'
     template_name = 'core/detail_keyboard.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        owner = self.get_object().user.username
+        context['user_profile'] = owner
+        return context
+
 class DeleteKeyboard(DeleteView):
     model = Keyboard
     context_object_name = 'keyboard'
@@ -173,6 +189,7 @@ class DeleteKeyboard(DeleteView):
         return super().form_valid(form)
     
     def get_success_url(self):
+        messages.error(self.request, f'Keyboard #{self.get_object().id} {self.get_object().name} deleted correct')
         return reverse_lazy('user_profile', kwargs={'username':self.request.user})
     
 class UpdateKeyboard(UpdateView):
@@ -181,19 +198,32 @@ class UpdateKeyboard(UpdateView):
     template_name = 'core/update_keyboard.html'
     form_class = CreateKeyboardForm
 
+    def form_valid(self, form):
+         if form.has_changed():
+                 messages.success(self.request, 'The keyboard save correct')
+                 print(form.changed_data)
+         else:
+                messages.info(self.request, "No changes were detected")
+         return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse_lazy('user_profile', kwargs={'username':self.request.user})
+        return reverse_lazy('detail_keyboard', kwargs={'pk':self.get_object().pk})
     
 class CreateSocialNetworkUser(TemplateView):
     template_name = 'core/add_networksocial_user.html'
 
     def get_success_url(self):
-        return reverse_lazy('user_profile', kwargs={'username':self.request.user})
+        messages.success(self.request, 'Network social add correct')
+        return reverse_lazy('configuration_user')
 
     def post(self, request):
         social_network = request.POST.get('social-networks')
         print(social_network)
-        obj_social_network = SocialNetwork.objects.get(name=social_network)
+        try:
+             obj_social_network = SocialNetwork.objects.get(name=social_network)
+        except SocialNetwork.DoesNotExist:
+            messages.error(self.request, 'Its not social network')
+            return redirect('add_socialnetwork')
         SocialNetworkUser.objects.create(user=request.user,social_network=obj_social_network )
         return redirect(self.get_success_url())
 
@@ -208,10 +238,10 @@ class CreateSocialNetworkUser(TemplateView):
         self.object.user = self.request.user
         try:
             self.object.save()
+            return redirect(self.get_success_url())
         except:
             messages.error(self.request, "Esta red social ya la tienes añadida!")
             return redirect('add_socialnetwork')
-        return redirect(self.get_success_url())
 
 class DeleteNetworkSocial(DeleteView):
     model = SocialNetworkUser
@@ -221,9 +251,9 @@ class DeleteNetworkSocial(DeleteView):
 
     def form_valid(self, form):
 
-        keyboard_delete = self.get_object()
+        network_delete = self.get_object()
 
-        if keyboard_delete.user != self.request.user:
+        if network_delete.user != self.request.user:
             return HttpResponseForbidden('You not cant eliminate network social by another user')
 
         return super().form_valid(form)
@@ -269,13 +299,13 @@ class CreateKeyboardComponent(CreateView):
 
     def form_valid(self, form):
  
-        componente = form.save()
+        component = form.save()
         
-        teclado = get_object_or_404(Keyboard, pk=self.kwargs['pk'])
+        keyboard = get_object_or_404(Keyboard, pk=self.kwargs['pk'])
 
-        KeyboardComponent.objects.create(keyboard=teclado, component=componente)
+        KeyboardComponent.objects.create(keyboard=keyboard, component=component)
         
-     
+        messages.success(self.request, f'Update component #{component.id} {component.model} ({component.get_type_display()}) of keyboard #{keyboard.id} {keyboard.name}')
         return redirect(self.get_success_url())
     
     def get_context_data(self, **kwargs):
@@ -302,8 +332,19 @@ class UpdateKeyboardComponent(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['keyboard'] = get_object_or_404(Keyboard, pk=self.kwargs['pk_k'])
+        context['component'] = self.get_object()
         return context
 
+    def form_valid(self, form):
+        keyboard = self.get_context_data()['keyboard']
+        component = self.get_context_data()['component']
+        if form.has_changed():
+            print(f"Campos modificados: {form.changed_data}")
+            messages.success(self.request, f'Update component #{component.id} {component.model} ({component.get_type_display()}) of keyboard #{keyboard.id} {keyboard.name}')
+        else:
+            messages.info(self.request, "No changes were detected")
+        return super().form_valid(form)
+            
     def get_success_url(self):
         return reverse_lazy('view_components', kwargs={'pk': self.kwargs['pk_k']})
     
@@ -326,4 +367,7 @@ class DeleteKeyboardComponent(DeleteView):
         return context
     
     def get_success_url(self):
+        keyboard = self.get_context_data()['keyboard']
+        component = self.get_context_data()['component']
+        messages.success(self.request, f'Delete component #{component.id} {component.model} ({component.get_type_display()}) of keyboard #{keyboard.id} {keyboard.name}')
         return reverse_lazy('view_components', kwargs={'pk': self.kwargs['pk_k']})

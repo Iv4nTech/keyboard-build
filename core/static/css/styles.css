@@ -818,6 +818,11 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, var(--bg-card) 100%);
 }
 
+.message.info {
+    border-left: 4px solid rgb(0, 204, 255); /* Rojo de tu paleta */
+    background: linear-gradient(90deg, rgba(68, 142, 239, 0.1) 0%, var(--bg-card) 100%);
+}
+
 .message.success {
     border-left: 4px solid rgb(71, 255, 71); /* Rojo de tu paleta */
     background: linear-gradient(90deg, rgba(117, 239, 68, 0.1) 0%, var(--bg-card) 100%);

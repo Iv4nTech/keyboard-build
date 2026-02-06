@@ -6,6 +6,15 @@
 
 {% block content %}
 
+  {% if messages %}
+    {% for message in messages %}
+    <div class="message {{message.tags}}">
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+
 <div class="detail-container">
     
     <div class="detail-card">
@@ -51,14 +60,13 @@
 
         </div>
     </div>
-   {% if user.username == user_profile.username %}
+   {% if user.username == user_profile %}
     <div class="action-buttons">
-        <a href="{% url 'user_profile' keyboard.user.username %}" class="btn btn-ghost">
-            Back
-        </a>
-
         <a href="{% url 'delete_keyboard' keyboard.pk %}" class="btn btn-danger">
             Delete keyboard
+        </a>
+         <a href="{% url 'update_keyboard' keyboard.pk %}" class="btn">
+            Update keyboard
         </a>
     </div>
     {% endif %}

@@ -5,8 +5,13 @@
 {% block tittle_section %}Components of keyboard #{{keyboard.id}} {{ keyboard.name|default:"Name not available" }} {% endblock %}
 
 {% block content %}
-
-
+    {% if messages %}
+    {% for message in messages %}
+    <div class="message {{message.tags}}">
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
     <div class="user-grid">
         {% for component in components %}
         <a href="{% url 'detail_components' pk_k=keyboard.id pk=component.component.pk %}">
