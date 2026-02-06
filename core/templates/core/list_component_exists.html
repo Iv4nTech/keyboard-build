@@ -1,24 +1,48 @@
 {% extends 'core/base.html' %}
 
-{% block tittle_bar %}Add new component exists{% endblock %}
-{% block tittle_section %}Add new component exists{% endblock %}
-
+{% block tittle_bar %}Add component{% endblock %}
+{% block tittle_section %}Search Component{% endblock %}
 
 {% block content %}
+<main class="detail-container" style="max-width: 900px;">
 
-<form action="" method="get">
-    <label for="brand">Brand</label>
-    <input type="text" name="brand">
-    <label for="brand">Model</label>
-    <input type="text" name="model">
-    <button type="submit">Filter</button>
-    <a href="{% url 'list_component' keyboard.pk %}">Delete filter</a>
-</form>
+    <form action="" method="get" class="search-bar">
+        <div style="flex: 1;">
+            <label for="brand">Brand</label>
+            <input type="text" name="brand" value="{{request.GET.brand}}" placeholder="Corsair, Logitech...">
+        </div>
+        <div style="flex: 1;">
+            <label for="model">Model</label>
+            <input type="text" name="model" value="{{request.GET.model}}" placeholder="K70, G Pro...">
+        </div>
+        <button type="submit">Filter</button>
+        <a href="{% url 'list_component' keyboard.pk %}" class="btn btn-ghost" style="padding: 0.8rem;">✕</a>
+    </form>
 
-{% for component in components %}
-{{component.brand}}
-{{component.model}}
-{{component.price}}
-<a href="{% url 'add_component' pk_k=keyboard.pk pk=component.pk  %}">+</a>
-{% endfor %}
+    <div class="user-grid">
+        {% for component in components %}
+        <div class="product-card">
+            <div class="product-header">
+                <div>
+                    <h3 class="product-title">{{component.brand}}</h3>
+                    <p class="component-model">{{component.model}}</p>
+                </div>
+                <span class="price-tag">{{component.price}}€</span>
+            </div>
+
+            <div class="product-divider"></div>
+
+            <div style="display: flex; justify-content: flex-end; padding-top: 1rem;">
+                <a href="{% url 'add_component' pk_k=keyboard.pk pk=component.pk  %}" class="btn" style="width: 100%;">+
+                    Add to Keyboard</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <p>No components found matching your search.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</main>
 {% endblock %}

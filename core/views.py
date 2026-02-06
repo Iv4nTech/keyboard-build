@@ -157,8 +157,6 @@ class CreateKeyboard(CreateView):
         
         return super().form_valid(form)
     
-    def get_success_url(self):
-        return reverse_lazy('user_profile', kwargs={'username':self.request.user})
     
 class ViewKeyboard(ListView):
     model = Keyboard
@@ -248,7 +246,7 @@ class CreateSocialNetworkUser(TemplateView):
             self.object.save()
             return redirect(self.get_success_url())
         except:
-            messages.error(self.request, "Esta red social ya la tienes añadida!")
+            messages.error(self.request, "This social netowrk was add!")
             return redirect('add_socialnetwork')
 
 class DeleteNetworkSocial(DeleteView):

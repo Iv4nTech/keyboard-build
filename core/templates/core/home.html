@@ -4,10 +4,12 @@
 {% if messages %}
 {% for message in messages %}
 <div class="message {{message.tags}}">
-{{message}}
+    {{message}}
 </div>
 {% endfor %}
 {% endif %}
 
-
+<div style="text-align: center; margin-top: 5rem; display: flex; justify-content: center; align-items: center;">
+    <h1 style="font-size: 4rem;">Welcome to <span style="color: var(--primary);">Keyboard Build</span>!</h1>
+</div>
 {% endblock %}

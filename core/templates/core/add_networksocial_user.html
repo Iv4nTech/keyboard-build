@@ -5,22 +5,32 @@
 
 
 {% block content %}
-  {% if messages %}
-    {% for message in messages %}
-    <div class="message {{message.tags}}">
-        {{message}}
-    </div>
-    {% endfor %}
-    {% endif %}
-<form action="" method="POST">
-    {% csrf_token %}
-    <select name="social-networks" id="social-networks">
-      <option value="----------">--------</option>
-      {% for social in social_networks %}
-        <option value="{{social.name}}">{{social.name}}</option>
-      {% endfor %}
-    </select>
-    <button type="submit">Add</button>
-</form>
+{% if messages %}
+{% for message in messages %}
+<div class="message {{message.tags}}">
+  {{message}}
+</div>
+{% endfor %}
+{% endif %}
+<div class="detail-container" style="max-width: 500px;">
+  <div class="detail-card" style="padding: 2rem;">
+    <form action="" method="POST" style="display: flex; flex-direction: column; gap: 1.5rem;">
+      {% csrf_token %}
+
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <label for="social-networks" style="color: var(--text-muted); font-size: 0.9rem;">Select Platform</label>
+        <select name="social-networks" id="social-networks"
+          style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px;">
+          <option value="----------">Choose a platform...</option>
+          {% for social in social_networks %}
+          <option value="{{social.name}}">{{social.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="btn" style="justify-content: center;">Add Social Network</button>
+    </form>
+  </div>
+</div>
 
 {% endblock %}

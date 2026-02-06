@@ -3,11 +3,26 @@
 {% block tittle_bar %}Create component for #{{keyboard.id}}{% endblock %}
 {% block tittle_section %}Create component for #{{keyboard.id}}{% endblock %}
 
-
+{% if messages %}
+    {% for message in messages %}
+        <div class="message {{message.tags}}">
+            {{message}}
+        </div>
+    {% endfor %}
+{% endif %}
 {% block content %}
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_div}}
-    <button type="submit">Create</button>
-</form>
+<div class="detail-container" style="max-width: 600px;">
+    <div class="detail-card" style="padding: 2rem;">
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                {{form.as_div}}
+            </div>
+            <div style="margin-top: 2rem; text-align: center;">
+                <button type="submit" class="btn" style="width: 100%; justify-content: center;">Create
+                    Component</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

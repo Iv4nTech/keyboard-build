@@ -6,31 +6,41 @@
 
 {% block content %}
 
-  {% if messages %}
-    {% for message in messages %}
-    <div class="message {{message.tags}}">
-        {{message}}
-    </div>
-    {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+<div class="message {{message.tags}}">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
 
 
 <div class="detail-container">
-    
+
     <div class="detail-card">
-          {% if keyboard.image %}
-          <img width="100px" src="{{keyboard.image.url}}" alt="Keyboard by user {{keyboard.user.username}}">
-          {% endif %}
+        {% if keyboard.image %}
+        <div style="width: 100%; height: 350px; overflow: hidden; border-bottom: 1px solid var(--border-color);">
+            <img src="{{keyboard.image.url}}" alt="{{keyboard.name}}"
+                style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        {% else %}
+        <div
+            style="width: 100%; height: 150px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border-color);">
+            <span style="color: var(--text-muted);">No image available</span>
+        </div>
+        {% endif %}
+
         <div class="detail-header-large">
             <h1 class="detail-title">{{keyboard.name}}</h1>
             <span class="price-tag-large">{{keyboard.price}}€</span>
         </div>
 
         <div class="detail-body">
-            
+
             <div class="detail-row">
                 <span class="detail-label">ID</span>
-                <span class="detail-value" style="font-family: monospace; color: var(--text-muted);">#{{keyboard.pk}}</span>
+                <span class="detail-value"
+                    style="font-family: monospace; color: var(--text-muted);">#{{keyboard.pk}}</span>
             </div>
 
             <div class="detail-row">
@@ -51,24 +61,32 @@
             <div class="detail-row">
                 <span class="detail-label">Owner</span>
                 <div class="detail-value">
-                    <div class="user-badge">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <div class="user-badge" style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
                         {{keyboard.user}}
                     </div>
                 </div>
             </div>
 
-            <a class="btn" href="{% url 'view_components' keyboard.pk %}">View components</a>
+        </div>
 
+        <div style="padding: 2rem; border-top: 1px solid var(--border-color);">
+            <a class="btn" style="width: 100%; justify-content: center;"
+                href="{% url 'view_components' keyboard.pk %}">View Components</a>
         </div>
     </div>
-   {% if user.username == user_profile %}
+
+    {% if user == keyboard.user %}
     <div class="action-buttons">
         <a href="{% url 'delete_keyboard' keyboard.pk %}" class="btn btn-danger">
-            Delete keyboard
+            Delete Keyboard
         </a>
-         <a href="{% url 'update_keyboard' keyboard.pk %}" class="btn">
-            Update keyboard
+        <a href="{% url 'update_keyboard' keyboard.pk %}" class="btn">
+            Update Keyboard
         </a>
     </div>
     {% endif %}

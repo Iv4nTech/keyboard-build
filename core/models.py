@@ -64,6 +64,11 @@ class Keyboard(models.Model):
     image = models.ImageField(upload_to='keyboards/', null=True, blank=True)
     component = models.ManyToManyField('Component', through='KeyboardComponent', related_name='keyboards')
 
+
+    def clean(self):
+        if self.stars > 5:
+            raise ValidationError('The stars cant be more than 5')
+
     def __str__(self):
         return f'{self.name} ({self.price}€)'
 
