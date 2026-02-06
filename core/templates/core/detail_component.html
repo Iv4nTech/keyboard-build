@@ -13,6 +13,9 @@
             <span class="component-type-badge" style="font-size: 1rem; margin-bottom: 0;">
                 {{ component.get_type_display }}
             </span>
+              {% if component.image %}
+          <img width="100px" src="{{component.image.url}}" alt="Keyboard by user {{keyboard.user.username}}">
+          {% endif %}
             <h1 class="detail-title">{{ component.brand }}</h1>
             <p class="profile-bio" style="margin-bottom: 0;">{{ component.model }}</p>
             

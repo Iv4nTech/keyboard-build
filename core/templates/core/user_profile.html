@@ -73,7 +73,9 @@
         {% for keyboard in keyboards %}
         <li class="product-card">
             <a href="{% url 'detail_keyboard' keyboard.pk %}" class="card-link">
-                
+                 {% if keyboard.image %}
+          <img width="100px" src="{{keyboard.image.url}}" alt="Keyboard by user {{keyboard.user.username}}">
+          {% endif %}
                 <div class="product-header">
                     <h3 class="product-title">{{keyboard.name}}</h3>
                     <span class="price-tag">{{keyboard.price}}€</span>

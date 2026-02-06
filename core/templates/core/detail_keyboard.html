@@ -18,7 +18,9 @@
 <div class="detail-container">
     
     <div class="detail-card">
-        
+          {% if keyboard.image %}
+          <img width="100px" src="{{keyboard.image.url}}" alt="Keyboard by user {{keyboard.user.username}}">
+          {% endif %}
         <div class="detail-header-large">
             <h1 class="detail-title">{{keyboard.name}}</h1>
             <span class="price-tag-large">{{keyboard.price}}€</span>

@@ -13,6 +13,9 @@
     <li class="product-card">
         
         <div class="product-header">
+          {% if keyboard.image %}
+          <img width="100px" src="{{keyboard.image.url}}" alt="Keyboard by user {{keyboard.user.username}}">
+          {% endif %}
             <h3 class="product-title">{{keyboard.name}}</h3>
             <span class="price-tag">{{keyboard.price}}€</span>
         </div>
@@ -38,6 +41,5 @@
     </div>
     {% endfor %}
 </ul>
-
 
 {% endblock %}

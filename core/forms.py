@@ -30,7 +30,7 @@ class ConfigurateUserForm(forms.Form):
 class CreateKeyboardForm(forms.ModelForm):
     class Meta:
         model = Keyboard
-        fields = ['name', 'colours', 'price', 'stars']
+        fields = ['name', 'colours', 'price', 'stars', 'image']
 
         widgets = {
             'colours':forms.TextInput(attrs={
@@ -41,7 +41,7 @@ class CreateKeyboardForm(forms.ModelForm):
 class CreateKeyboardComponentForm(forms.ModelForm):
     class Meta:
         model = Component
-        fields = ['brand', 'model', 'price', 'shopping_website', 'type']
+        fields = ['brand', 'model', 'price', 'shopping_website', 'type', 'image']
 
 class UpdateKeyboardComponentForm(forms.ModelForm):
     class Meta:
