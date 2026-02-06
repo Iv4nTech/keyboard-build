@@ -961,3 +961,38 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     padding: 5px 15px;
     border-radius: 20px;
 }
+
+.pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+    height: 45px;
+    padding: 0; 
+    border-radius: 0.75rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05); /* Fondo sutil oscuro */
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+/* Hover para los números NO seleccionados */
+.pagination-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(249, 115, 22, 0.1);
+    transform: translateY(-2px);
+}
+
+/* EL SELECCIONADO: Fondo Blanco, Texto Naranja */
+.number-selected {
+    background: #ffffff !important; /* !important asegura que mate el gradiente del .btn original */
+    background-image: none !important; 
+    color: var(--primary) !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 10px var(--primary-glow);
+    transform: scale(1.1);
+    z-index: 2;
+}

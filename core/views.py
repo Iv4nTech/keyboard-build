@@ -10,6 +10,7 @@ from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .funtions_aux import data_paginator
 def home(request):
     return render(request, 'core/home.html')
 
@@ -26,12 +27,12 @@ def list_users(request):
         users = users.filter(username__icontains = username)
     if level:
         users = User.objects.annotate(max_level=Max('levels__level__number')).order_by('-max_level')
-        users = users.filter(max_level__gt=level)
-    return render(request, 'core/list_users.html', {'users':users})
+        users = users.filter(max_level__gte=level)
+    return render(request, 'core/list_users.html', {'page_obj':data_paginator(request, users, 10)})
 
 def ranking_users(request):
     users = User.objects.annotate(max_level=Max('levels__level__number')).order_by('-max_level')
-    return render(request, 'core/ranking_users.html',  {'users':users})
+    return render(request, 'core/ranking_users.html',  {'page_obj':data_paginator(request, users, 5)})
 
 def registration(request):
     if request.method == 'POST':
@@ -157,6 +158,7 @@ class ViewKeyboard(ListView):
     model = Keyboard
     template_name = 'core/view_keyboards.html'
     context_object_name = 'keyboards'
+    paginate_by = 5
 
     def get_queryset(self):
         print(self.kwargs['username'])
@@ -264,6 +266,7 @@ class ViewKeyboardComponents(ListView):
     model = KeyboardComponent
     context_object_name = 'components'
     template_name = 'core/view_keyboard_components.html'
+    paginate_by = 1
 
 
     def get_queryset(self):

@@ -18,7 +18,7 @@
 </form>
 
 <ul class="user-grid">
-{% for user in users %}
+{% for user in page_obj %}
     <li class="user-card">
         <a href="{% url 'user_profile' user.username %}" style="display: flex; align-items: center; gap: 15px; width: 100%;">
             <div class="user-initial">
@@ -34,6 +34,27 @@
             </div>
         </a>
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>
+
+{% if page_obj.has_previous %}
+  <a class="btn" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Anterior</a>
+{% endif %}
+
+{% if page_obj.paginator.num_pages > 1 %}
+{% for number in page_obj.paginator.page_range %}
+{% if number == page_obj.number %}
+<a class="pagination-btn number-selected" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{number}}">
+    {{ number }}
+</a>
+{% else %}
+<a class="btn btn-ghost" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{number}}">
+    {{ number }}
+</a>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if page_obj.has_next %}
+  <a class="btn" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Siguiente</a>
+{% endif %}
 {% endblock %}
