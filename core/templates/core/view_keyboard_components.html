@@ -32,9 +32,9 @@
             <div class="product-divider"></div>
             
             <div class="product-footer">
-                <span class="product-label">Purchase Link</span>
+                <span class="product-label">Purchase link</span>
                 <a href="{{ component.component.shopping_website }}" target="_blank" class="pill-tag link-action">
-                    Visit Store <i class="fas fa-external-link-alt"></i>
+                    Visit store <i class="fas fa-external-link-alt"></i>
                 </a>
             </div>
         </li>
@@ -45,7 +45,9 @@
         </div>
         {% endfor %}
     </div>
+    {% if user.username == keyboard.user.username %}
     <a href="{% url 'create_component' keyboard.id %}" class="btn">Create component</a>
+    {% endif %}
 </div>
 {% if page_obj.has_previous %}
   <a class="btn" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Anterior</a>

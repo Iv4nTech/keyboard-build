@@ -39,8 +39,11 @@
                 <span class="detail-label">Category</span>
                 <span class="detail-value">{{ component.get_type_display}}</span>
             </div>
+
+            {% if user.username == keyboard.user.username %}
             <a href="{% url 'update_component' pk_k=keyboard.pk pk=component.pk %}" class="btn">Update</a>
             <a href="{% url 'delete_component' pk_k=keyboard.pk pk=component.pk %}" class="btn btn-danger">Delete</a>
+            {% endif %}
     </div>
 </main>
 {% endblock %}
