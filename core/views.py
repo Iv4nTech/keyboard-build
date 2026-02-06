@@ -310,3 +310,23 @@ class UpdateKeyboardComponent(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('view_components', kwargs={'pk': self.kwargs['pk_k']})
+    
+class DeleteKeyboardComponent(DeleteView):
+    model = Component
+    context_object_name =  'component'
+    template_name = 'core/delete_component.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Component, 
+            pk=self.kwargs['pk'], 
+            builds__keyboard__pk=self.kwargs['pk_k']
+        )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyboard'] = get_object_or_404(Keyboard, pk=self.kwargs['pk_k'])
+        return context
+    
+    def get_success_url(self):
+        return reverse_lazy('view_components', kwargs={'pk': self.kwargs['pk_k']})
