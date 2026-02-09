@@ -6,16 +6,16 @@
 
 {% block content %}
 
-    {% if messages %}
-    {% for message in messages %}
-    <div class="message {{message.tags}}">
-        {{message}}
-    </div>
-    {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+<div class="message {{message.tags}}">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
 
 <div class="profile-card">
-    
+
     <div class="profile-glow-effect"></div>
 
     <div class="profile-content">
@@ -25,12 +25,12 @@
             {% else %}
             <img class="profile-img-large" src="{% static 'images/logo-default.jpg' %}" alt="Logo default">
             {% endif %}
-            
+
             <div class="status-indicator"></div>
         </div>
 
         <h2 class="profile-username">@{{user_profile.username}}</h2>
-        
+
         <p class="profile-bio">{{user_profile.bio | default:""}}</p>
 
         <div class="expand-trigger-container">
@@ -50,18 +50,18 @@
             </li>
             <li class="expand-item">
                 <span style="color: var(--text-muted);">Birth Date</span>
-                <span style="color: var(--text-main);">{{user_profile.dateofbirth  | default:'Not available'}}</span>
+                <span style="color: var(--text-main);">{{user_profile.dateofbirth | default:'Not available'}}</span>
             </li>
             <li class="expand-item">
                 <span style="color: var(--text-muted);">Country</span>
                 <span style="color: var(--text-main);">{{user_profile.country | default:'Not available'}}</span>
-            </li> 
+            </li>
         </ul>
     </div>
 </div>
 
 <div class="section-spacer">
-    
+
     <div class="section-header">
         <h3 class="section-title">Keyboards</h3>
         {% if user.username == user_profile.username %}
@@ -73,9 +73,17 @@
         {% for keyboard in keyboards %}
         <li class="product-card">
             <a href="{% url 'detail_keyboard' keyboard.pk %}" class="card-link">
-                 {% if keyboard.image %}
-          <img width="100px" src="{{keyboard.image.url}}" alt="Keyboard by user {{keyboard.user.username}}">
-          {% endif %}
+                {% if keyboard.image %}
+                <div style="height: 200px; width: 100%; overflow: hidden; border-radius: 8px; margin-bottom: 1rem;">
+                    <img src="{{keyboard.image.url}}" alt="{{keyboard.name}}"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                {% else %}
+                <div
+                    style="height: 200px; width: 100%; background-color: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-bottom: 1rem;">
+                    <span class="text-muted">No image</span>
+                </div>
+                {% endif %}
                 <div class="product-header">
                     <h3 class="product-title">{{keyboard.name}}</h3>
                     <span class="price-tag">{{keyboard.price}}€</span>
@@ -103,7 +111,9 @@
     </ul>
 </div>
 
-<a class="btn" href="{% url 'view_keyboards' user_profile.username %}">More keyboards</a>
+<div style="text-align: center; margin-top: 3rem; margin-bottom: 2rem;">
+    <a class="btn" href="{% url 'view_keyboards' user_profile.username %}">View All Keyboards &rarr;</a>
+</div>
 
 <script src="{% static 'js/more_abaut.js' %}"></script>
 {% endblock %}

@@ -33,7 +33,7 @@ def list_users(request):
     if level:
         users = User.objects.annotate(max_level=Max('levels__level__number')).order_by('-max_level')
         users = users.filter(max_level__gte=level)
-    return render(request, 'core/list_users.html', {'page_obj':data_paginator(request, users, 10)})
+    return render(request, 'core/list_users.html', {'page_obj':data_paginator(request, users, 1)})
 
 @login_required
 def ranking_users(request):
@@ -124,6 +124,10 @@ class CreateKeyboard(CreateView):
     model = Keyboard
     template_name = 'core/create_keyboard.html'
     form_class = CreateKeyboardForm
+    
+
+    def get_success_url(self):
+        return reverse_lazy('user_profile', kwargs={'username':self.request.user.username})
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -157,8 +161,6 @@ class CreateKeyboard(CreateView):
         
         return super().form_valid(form)
     
-    def get_success_url(self):
-        return reverse_lazy('user_profile', kwargs={'username':self.request.user})
     
 class ViewKeyboard(ListView):
     model = Keyboard
@@ -248,7 +250,7 @@ class CreateSocialNetworkUser(TemplateView):
             self.object.save()
             return redirect(self.get_success_url())
         except:
-            messages.error(self.request, "Esta red social ya la tienes añadida!")
+            messages.error(self.request, "This social netowrk was add!")
             return redirect('add_socialnetwork')
 
 class DeleteNetworkSocial(DeleteView):
@@ -427,6 +429,7 @@ class AddComponentExists(CreateView):
     model = KeyboardComponent
     template_name = 'core/add_component_exists.html'
     fields = []
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['keyboard'] = Keyboard.objects.get(pk=self.kwargs['pk_k'])

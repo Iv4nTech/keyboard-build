@@ -2,72 +2,90 @@
 {% load static %}
 
 {% block tittle_bar %}View components{% endblock %}
-{% block tittle_section %}Components of keyboard #{{keyboard.id}} {{ keyboard.name|default:"Name not available" }} {% endblock %}
+{% block tittle_section %}Components of keyboard #{{keyboard.id}} {{ keyboard.name|default:"Name not available" }}
+{% endblock %}
 
 {% block content %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="message {{message.tags}}">
-        {{message}}
-    </div>
-    {% endfor %}
-    {% endif %}
-    <div class="user-grid">
-        {% for component in components %}
-        <a href="{% url 'detail_components' pk_k=keyboard.id pk=component.component.pk %}">
-        <li class="product-card component-card">
+{% if messages %}
+{% for message in messages %}
+<div class="message {{message.tags}}">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="user-grid">
+    {% for component in components %}
+    <li class="product-card component-card">
+        <a href="{% url 'detail_components' pk_k=keyboard.id pk=component.component.pk %}" class="card-link">
+
+            {% if component.component.image %}
+            <div class="product-image-container">
+                <img class="product-image" src="{{component.component.image.url}}" alt="{{component.component.brand}}">
+            </div>
+            {% else %}
+            <div class="product-image-container">
+                <span style="color: var(--text-muted);">No image</span>
+            </div>
+            {% endif %}
+
             <div class="product-header">
-                  {% if component.component.image %}
-          <img width="100px" src="{{component.component.image.url}}" alt="Keyboard by user {{keyboard.user.username}}">
-          {% endif %}
                 <div>
-                    <span class="component-type-badge">{{ component.component.get_type_display|default:component.component.type }}</span>
+                    <span
+                        class="component-type-badge">{{component.component.get_type_display|default:component.component.type}}</span>
                     <h3 class="product-title">{{ component.component.brand }}</h3>
+                    <p class="component-model">{{ component.component.model }}</p>
                 </div>
                 <span class="price-tag">${{ component.component.price }}</span>
             </div>
-            
-            <p class="component-model">{{ component.component.model }}</p>
-            
+
             <div class="product-divider"></div>
-            
+
             <div class="product-footer">
                 <span class="product-label">Purchase link</span>
-                <a href="{{ component.component.shopping_website }}" target="_blank" class="pill-tag link-action">
-                    Visit store <i class="fas fa-external-link-alt"></i>
-                </a>
+                <span style="display: block; font-size: 0.9rem; color: var(--primary);">Visit Store &rarr;</span>
             </div>
-        </li>
         </a>
-        {% empty %}
-        <div class="empty-state">
-            <p>This keyboard not have components.</p>
-        </div>
-        {% endfor %}
+    </li>
+    {% empty %}
+    <div class="empty-state">
+        <p>This keyboard not have components.</p>
     </div>
-    {% if user.username == keyboard.user.username %}
-    <a href="{% url 'create_component' keyboard.id %}" class="btn">Create component</a>
-    <a href="{% url 'list_component' keyboard.id %}" class="btn">Add component exists</a>
-    {% endif %}
+    {% endfor %}
 </div>
-{% if page_obj.has_previous %}
-  <a class="btn" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Anterior</a>
+
+{% if user.username == keyboard.user.username %}
+<div style="text-align: center; margin-top: 3rem; display: flex; gap: 1rem; justify-content: center;">
+    <a href="{% url 'create_component' keyboard.id %}" class="btn">Create New Component</a>
+    <a href="{% url 'list_component' keyboard.id %}" class="btn btn-ghost">Add Existing Component</a>
+</div>
 {% endif %}
 
-{% if page_obj.paginator.num_pages > 1 %}
-{% for number in page_obj.paginator.page_range %}
-{% if number == page_obj.number %}
-<a class="pagination-btn number-selected" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{number}}">
-    {{ number }}
-</a>
-{% else %}
-<a class="btn btn-ghost" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{number}}">
-    {{ number }}
-</a>
-{% endif %}
-{% endfor %}
-{% endif %}
-{% if page_obj.has_next %}
-  <a class="btn" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Siguiente</a>
-{% endif %}
+<div style="margin-top: 4rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
+    {% if page_obj.has_previous %}
+    <a class="btn"
+        href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Anterior</a>
+    {% endif %}
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    {% for number in page_obj.paginator.page_range %}
+    {% if number == page_obj.number %}
+    <a class="pagination-btn number-selected"
+        href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{number}}">
+        {{ number }}
+    </a>
+    {% else %}
+    <a class="pagination-btn"
+        href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{number}}">
+        {{ number }}
+    </a>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if page_obj.has_next %}
+    <a class="btn"
+        href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Siguiente</a>
+    {% endif %}
+</div>
 {% endblock %}
